@@ -20,7 +20,9 @@ def parser(tokens):
 				sys.exit(1)
 		else:
 			if token[1] == 'TAG':
-				doc.addItem(level, Tag(level, args=token[0]))
+				doc.addItem(level, Tag(level, token[0], is_need_close_tag=False))
+			elif token[1] == 'TYPE':
+				doc.setType(token[0])
 			else:
 				doc.addItem(level, token[0])
 	if not level:

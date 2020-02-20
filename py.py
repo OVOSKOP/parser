@@ -8,7 +8,8 @@ if __name__ == '__main__':
     characters = file.read()
     file.close()
     tokens = imp_lex(characters)
-    dom = imp_prs(tokens)
-    for token in tokens:
-        print (token)
-    print(dom)
+    document = imp_prs(tokens)
+    # for token in tokens:
+        # print (token)
+    qwe = document.getElementById("qwe")
+    print(qwe)
