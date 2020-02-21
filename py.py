@@ -11,5 +11,5 @@ if __name__ == '__main__':
     document = imp_prs(tokens)
     # for token in tokens:
         # print (token)
-    qwe = document.getElementById("qwe")
-    print(qwe)
+    qwe = document.getElementsByClassName("form-control")[0]
+    print(qwe.textContent())

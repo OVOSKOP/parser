@@ -58,6 +58,37 @@ class Tag:
 				line += elem
 		return line
 
+	def outerHTML(self, HTML = None):
+		line = f"<{self.name}"
+
+		for atr in self.atrs:
+			line += f' {atr}="{self.atrs[atr]}"'
+
+		if not self.is_need_close_tag:
+			line += f" />"
+		else:
+			line += f">"
+			for elem in self.content:
+				typeElem = str(type(elem)).split("'")[1].split(".")
+				typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+				if typeElem == "Tag":
+						line += elem.outerHTML()
+				else:
+					line += elem
+		line += f"</{self.name}>"
+		return line
+
+	def textContent(self):
+		line = ""
+		for elem in self.content:
+			typeElem = str(type(elem)).split("'")[1].split(".")
+			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+			if typeElem == "Tag":
+					line += elem.textContent()
+			else:
+				line +=  elem + ' '
+		return line
+
 class DOM:
 	def __init__(self, content = None):
 		self.content = []
