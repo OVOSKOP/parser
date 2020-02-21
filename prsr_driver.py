@@ -16,6 +16,7 @@ class Tag:
 	def __repr__(self):
 		tabs = ''.join(['     ' for i in range(self.level+1)])
 		line = f"{self.name}"
+		# atributes
 		# for atr in self.atrs:
 		# 	line += f"\n{tabs}  {atr + ' : ' + self.atrs[atr]}"
 		for item in self.content:
@@ -72,7 +73,7 @@ class Tag:
 				typeElem = str(type(elem)).split("'")[1].split(".")
 				typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
 				if typeElem == "Tag":
-						line += elem.outerHTML()
+					line += elem.outerHTML()
 				else:
 					line += elem
 		line += f"</{self.name}>"
