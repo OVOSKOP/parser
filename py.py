@@ -12,6 +12,6 @@ if __name__ == "__main__":
     document = imp_prs(tokens)
     # for token in tokens:
         # print (token)
-    # table = document.getElementsByClassName("fl_left scorestable")[0]
+    ast = document.getElementById("ast")
     # return document
-    print(document)
+    print(ast.getParent())

@@ -7,7 +7,7 @@ VALUE          = 'VALUE'
 token_exprs = [
     (r'[ \n\t}]+',        None),
     (r'(/\*)[^$]*(\*/)',  None),
-    (r'([\w]+|\*)( )*({)',     NAME),
+    (r'([\w]+|\*)( )*({)',NAME),
 	(r'[\w]+( )*(:)( )?', STYLE),
 	(r'[\w]+(;)?',        VALUE),
       

@@ -21,11 +21,12 @@ def getStyle(filename):
 	return styles
 
 
-styles = getStyle("default.css")
+# styles = getStyle("default.css")
 
 class Tag:
 	def __init__(self, level, args, is_need_close_tag = True):
 		self.content = []
+		self.parent = None
 		self.args = args
 		self.level = level
 		self.name = args[0][0]
@@ -38,9 +39,10 @@ class Tag:
 					pass
 				else:
 					self.atrs[atr[0][0][0]] = atr[0][1][0].replace('"', '')
-		if self.name == "link" and "rel" in self.atrs:
-			if self.atrs["rel"] == "stylesheet":
-				styles.update(getStyle(self.atrs["href"]))
+		#               **** STYLES ****
+		# if self.name == "link" and "rel" in self.atrs:
+		# 	if self.atrs["rel"] == "stylesheet":
+		# 		styles.update(getStyle(self.atrs["href"]))
 
 
 	def __repr__(self):
@@ -124,7 +126,7 @@ class Tag:
 				line += elem
 		return line
 
-	def children(self):
+	def getChildren(self):
 		elems = []
 		for elem in self.content:
 			typeElem = str(type(elem)).split("'")[1].split(".")
@@ -133,6 +135,9 @@ class Tag:
 				elems.append(elem)
 
 		return elems
+
+	def getParent(self):
+		return self.parent
 
 class DOM:
 	def __init__(self, content = None):
@@ -145,7 +150,7 @@ class DOM:
 		line = ""
 		for item in self.content:
 			line += f"{str(item)}\n"
-			line += str(styles)
+			# line += str(styles)
 		return line
 
 	def setType(self, typeDOM):
@@ -158,6 +163,12 @@ class DOM:
 		if not tag:
 			tag = self
 		if level == current_level:
+			typeElem = str(type(content)).split("'")[1].split(".")
+			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0]
+
+			if typeElem == "Tag":
+				content.parent = tag
+
 			tag.content.append(content)
 			return tag
 		tag.content[len(tag.content) - 1] = self.addItem(level, content, tag.content[len(tag.content) - 1], current_level + 1)
