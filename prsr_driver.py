@@ -1,3 +1,28 @@
+from imp_lexer_css import *
+
+def getStyle(filename):
+	styles = {}
+	tag = 0
+	file = open(filename, encoding="utf-8")
+	characters = file.read()
+	file.close()
+
+	tokens = imp_lex_css(characters)
+
+	for token in tokens:
+		if token[1] == "NAME":
+			tag = token[0].split(" ")[0]
+			styles[tag] = {}
+		if token[1] == "STYLE":
+			style = token[0].split(": ")[0]
+		if token[1] == "VALUE":
+			styles[tag][style] = token[0].split(";")[0]
+
+	return styles
+
+
+styles = getStyle("default.css")
+
 class Tag:
 	def __init__(self, level, args, is_need_close_tag = True):
 		self.content = []
@@ -5,6 +30,7 @@ class Tag:
 		self.level = level
 		self.name = args[0][0]
 		self.atrs = {}
+		self.atrs["style"] = {}
 		self.is_need_close_tag = is_need_close_tag
 		if len(args) > 1:
 			for atr in args[1:]:
@@ -12,9 +38,13 @@ class Tag:
 					pass
 				else:
 					self.atrs[atr[0][0][0]] = atr[0][1][0].replace('"', '')
+		if self.name == "link" and "rel" in self.atrs:
+			if self.atrs["rel"] == "stylesheet":
+				styles.update(getStyle(self.atrs["href"]))
+
 
 	def __repr__(self):
-		tabs = ''.join(['     ' for i in range(self.level+1)])
+		tabs = ''.join(['     ' for i in range(self.level)])
 		line = f"{self.name}"
 		# atributes
 		# for atr in self.atrs:
@@ -23,19 +53,23 @@ class Tag:
 			line += f"\n{tabs}|____{str(item)}"
 		return line
 
-	def findBy(self, atr, value):
+	def findBy(self, atr = None, value = None, tagName = None):
 		elems = []
 		for elem in self.content:
 			typeElem = str(type(elem)).split("'")[1].split(".")
 			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
 			# print(typeElem, value)
 			if typeElem == "Tag":
-				if atr in elem.atrs:
-					# print(atr, elem.atrs, value)
-					if elem.atrs[atr] == value:
+				if not tagName:
+					if atr in elem.atrs:
+						# print(atr, elem.atrs, value)
+						if elem.atrs[atr] == value:
+							elems.append(elem)
+					elems.extend(elem.findBy(atr, value))
+				else:
+					if elem.name == tagName:
 						elems.append(elem)
-				elems.extend(elem.findBy(atr, value))
-
+					elems.extend(elem.findBy(tagName=tagName))
 		return elems
 
 	def innerHTML(self, HTML = None):
@@ -87,8 +121,18 @@ class Tag:
 			if typeElem == "Tag":
 					line += elem.textContent()
 			else:
-				line +=  elem + ' '
+				line += elem
 		return line
+
+	def children(self):
+		elems = []
+		for elem in self.content:
+			typeElem = str(type(elem)).split("'")[1].split(".")
+			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+			if typeElem == "Tag":
+				elems.append(elem)
+
+		return elems
 
 class DOM:
 	def __init__(self, content = None):
@@ -98,9 +142,10 @@ class DOM:
 			self.content.append(content)
 
 	def __repr__(self):
-		line = f"DOM\n"
+		line = ""
 		for item in self.content:
-			line += f"|____{str(item)}\n"
+			line += f"{str(item)}\n"
+			line += str(styles)
 		return line
 
 	def setType(self, typeDOM):
@@ -141,6 +186,31 @@ class DOM:
 					if elem.atrs['class'] == idName:
 						elems.append(elem)
 				elems.extend(elem.findBy('class', className))
+
+		return elems
+
+	def getElementsByTagName(self, tagName):
+		elems = []
+		for elem in self.content:
+			typeElem = str(type(elem)).split("'")[1].split(".")
+			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+			if typeElem == "Tag":
+				if elem.name == tagName:
+					elems.append(elem)
+				elems.extend(elem.findBy(tagName=tagName))
+
+		return elems
+
+	def getElementsByAtributeName(self, atr, value):
+		elems = []
+		for elem in self.content:
+			typeElem = str(type(elem)).split("'")[1].split(".")
+			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+			if typeElem == "Tag":
+				if atr in elem.atrs:
+					if elem.atrs[atr] == value:
+						elems.append(elem)
+				elems.extend(elem.findBy(atr, value))
 
 		return elems
 

@@ -11,23 +11,20 @@ def lex(characters, token_exprs, sub_token_exprs=None):
             #print()
             pattern, tag = token_expr
             #print('pattern' + pattern)
-            #print('pos = ' + str(pos), 'char' + characters[pos])
+            # print('pos = ' + str(pos), 'char ' + characters[pos])
             regex = re.compile(pattern)
             match = regex.match(characters, pos)
             if match:
                 #print('match' + match)
                 text = match.group(0)
                 if tag:
-                    #print('tag' + tag)
                     if (tag == "TAG" or tag == "CLOSE_TAG" or tag == "OPEN_TAG") and sub_token_exprs:
                         text = lex(text, sub_token_exprs[0], sub_token_exprs)
                     if tag == "ATRIBUTE" and sub_token_exprs:
-                        #print(text, tag)
-                        #print(sub_token_exprs[1])
                         text = lex(text, sub_token_exprs[1], sub_token_exprs)
 
                     token = (text, tag)
-                    # print('tag' + tag)
+                    # print('tag ' + tag)
                     tokens.append(token)
                 break
         if not match:

@@ -3,7 +3,6 @@ from prsr_driver import *
 
 def parser(tokens):
 	buff = []
-	buff_content = []
 	level = 0
 	doc = DOM()
 	for token in tokens:
