@@ -224,4 +224,7 @@ class DOM:
 				elems.extend(elem.findBy(atr, value))
 
 		return elems
+	
+	def getParent(self):
+		return None
 

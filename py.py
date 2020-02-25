@@ -14,4 +14,4 @@ if __name__ == "__main__":
         # print (token)
     ast = document.getElementById("ast")
     # return document
-    print(ast.getParent())
+    print(ast.getParent()))
