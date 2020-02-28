@@ -64,8 +64,11 @@ class Tag:
 			if typeElem == "Tag":
 				if not tagName:
 					if atr in elem.atrs:
+						if value:
 						# print(atr, elem.atrs, value)
-						if elem.atrs[atr] == value:
+							if elem.atrs[atr] == value:
+								elems.append(elem)
+						else:
 							elems.append(elem)
 					elems.extend(elem.findBy(atr, value))
 				else:
@@ -212,7 +215,7 @@ class DOM:
 
 		return elems
 
-	def getElementsByAtributeName(self, atr, value):
+	def getElementsByAtribute(self, atr, value = None):
 		elems = []
 		for elem in self.content:
 			typeElem = str(type(elem)).split("'")[1].split(".")

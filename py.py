@@ -12,6 +12,6 @@ if __name__ == "__main__":
     document = imp_prs(tokens)
     # for token in tokens:
         # print (token)
-    ast = document.getElementById("ast")
+    ast = document.getElementsByAtribute("class", "bad")
     # return document
-    print(ast.getParent()))
+    print(ast)
