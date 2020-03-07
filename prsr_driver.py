@@ -1,28 +1,31 @@
-from imp_lexer_css import *
+## ADD STYLES FOR BROWSER ##
 
-def getStyle(filename):
-	styles = {}
-	tag = 0
-	file = open(filename, encoding="utf-8")
-	characters = file.read()
-	file.close()
+# from imp_lexer_css import *
 
-	tokens = imp_lex_css(characters)
+# def getStyle(filename):
+# 	styles = {}
+# 	tag = 0
+# 	file = open(filename, encoding="utf-8")
+# 	characters = file.read()
+# 	file.close()
 
-	for token in tokens:
-		if token[1] == "NAME":
-			tag = token[0].split(" ")[0]
-			styles[tag] = {}
-		if token[1] == "STYLE":
-			style = token[0].split(": ")[0]
-		if token[1] == "VALUE":
-			styles[tag][style] = token[0].split(";")[0]
+# 	tokens = imp_lex_css(characters)
 
-	return styles
+# 	for token in tokens:
+# 		if token[1] == "NAME":
+# 			tag = token[0].split(" ")[0]
+# 			styles[tag] = {}
+# 		if token[1] == "STYLE":
+# 			style = token[0].split(": ")[0]
+# 		if token[1] == "VALUE":
+# 			styles[tag][style] = token[0].split(";")[0]
+
+# 	return styles
 
 
 # styles = getStyle("default.css")
 
+# Tag
 class Tag:
 	def __init__(self, level, args, is_need_close_tag = True):
 		self.content = []
@@ -141,6 +144,9 @@ class Tag:
 
 	def getParent(self):
 		return self.parent
+
+	def tagName(self):
+		return self.name
 
 class DOM:
 	def __init__(self, content = None):
