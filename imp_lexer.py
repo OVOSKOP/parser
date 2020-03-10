@@ -36,9 +36,11 @@ token_tag = [
     	(r'"[^"\n]*"',  VALUE),
     ],
     [
-        (r'<\/[a-zA-Z0-9]*>',                                     CLOSE_TAG),
-        (r'<([a-zA-Z0-9]+)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', OPEN_TAG), 
-        (r'[\w\W]+',                                               CONTENT),
+        (r'[ \n\t]+',                                             None),
+        (r'<\/script>',                                     None),
+        (r'<script( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', None), 
+        (r'[^<>]+',                                               CONTENT),
+        (r'(([\S\w\W]))+',                                               CONTENT),
     ]
 ]
 
