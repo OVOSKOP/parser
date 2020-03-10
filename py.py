@@ -79,9 +79,10 @@ if __name__ == "__main__":
     characters = file.read()
     file.close()
     tokens = imp_lex(characters) #лексируем файл
-    # document = imp_prs(tokens) #парсируем файл
-    for token in tokens:
-        print (token)
+    
+    # for token in tokens:
+        # print (token)
+    document = imp_prs(tokens) #парсируем файл
     # ast = document.getElementsByAtribute("class", "bad")
     # return document
-    # print(document)
+    print(document)

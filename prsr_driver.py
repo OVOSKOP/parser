@@ -55,7 +55,7 @@ class Tag:
 		# for atr in self.atrs:
 		# 	line += f"\n{tabs}  {atr + ' : ' + self.atrs[atr]}"
 		for item in self.content:
-			line += f"\n{tabs}|____{str(item)}"
+			line += f"\n{tabs}|____" + '%r' % item
 		return line
 
 	def findBy(self, atr = None, value = None, tagName = None):
@@ -152,6 +152,8 @@ class DOM:
 	def __init__(self, content = None):
 		self.content = []
 		self.type = None
+		self.JS = []
+		self.CSS = []
 		if content:
 			self.content.append(content)
 
@@ -182,6 +184,13 @@ class DOM:
 			return tag
 		tag.content[len(tag.content) - 1] = self.addItem(level, content, tag.content[len(tag.content) - 1], current_level + 1)
 		return tag
+
+	def addJS(self, content):
+		self.JS.append(content)
+
+	def addCSS(self, content):
+		self.CSS.append(content)
+
 
 	def getElementById(self, idName):
 		elems = []
