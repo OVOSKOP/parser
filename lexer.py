@@ -22,6 +22,8 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                         text = lex(text, sub_token_exprs[0], sub_token_exprs)
                     if tag == "ATRIBUTE" and sub_token_exprs:
                         text = lex(text, sub_token_exprs[1], sub_token_exprs)
+                    if tag == "SCRIPT" and sub_token_exprs:
+                        text = lex(text, sub_token_exprs[2], sub_token_exprs)
 
                     token = (text, tag)
                     # print('tag ' + tag)

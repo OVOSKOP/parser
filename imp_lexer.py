@@ -5,6 +5,7 @@ OPEN_TAG      = 'OPEN_TAG'
 CLOSE_TAG     = 'CLOSE_TAG'
 TYPE          = 'TYPE'
 CONTENT       = 'CONTENT'
+SCRIPT        = 'SCRIPT'
 
 TAG_NAME      = 'TAG_NAME'
 ATRIBUTE      = 'ATRIBUTE'
@@ -14,6 +15,7 @@ VALUE         = 'VALUE'
 token_exprs = [
     (r'[ \n\t]+',                                             None),
     (r'<!--[^$]*-->',                                         None),
+    (r'<script>[\w\W]*</script>',                             SCRIPT),
     (r'<\/[a-zA-Z0-9]*>',                                     CLOSE_TAG),
     (r'<!DOCTYPE [ a-zA-Z0-9.:\/\-\"]+>',                     TYPE),
     (r'[^<>]+',                                               CONTENT),
@@ -32,6 +34,11 @@ token_tag = [
     	(r'[\s=/]+',    None),
 		(r'[a-zA-Z-]+', ATRIBUTE_NAME),
     	(r'"[^"\n]*"',  VALUE),
+    ],
+    [
+        (r'<\/[a-zA-Z0-9]*>',                                     CLOSE_TAG),
+        (r'<([a-zA-Z0-9]+)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', OPEN_TAG), 
+        (r'[\w\W]+',                                               CONTENT),
     ]
 ]
 
