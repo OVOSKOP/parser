@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.1.37
+##	HTML PARSER V.2.1.56
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -7,11 +7,11 @@
 ##	CLASSES:
 ##		
 ##		TAG - Object of Tag
-##		DOM - Document Object Model
+##		Node - Document Object Model or Node of Tags
 ##
 ##	AVAILABLE FUNCTIONS:
 ##
-##		DOM:
+##		Node:
 ##			getType() - get type of document
 ##				OUTPUT:
 ##					str - type of document
@@ -79,9 +79,14 @@
 ##  PLANS:: 
 ##          previousSibling, nextSibling - COMPLETED 13.03.2020
 ##          createElement(name) - COMPLETED 13.03.2020
-##          TAG::before , prepend , !``append``! , after - add tag
-##          TAG::addAtribute(**kwargs)
-##          TAG:: id, class --- array
+##          TAG::before , prependElem , appendElem , after - add tag - COMPLETED 14.03.2020 
+##          TAG::addAtribute(**kwargs) - COMPLETED 13.03.2020 
+##          TAG:: id, class --- array - COMPLETED 14.03.2020 
+##          TAG:: levels - COMPLETED 14.03.2020
+##          create class::TEXT - COMPLETED 14.03.2020
+##
+## 
+##
 ##
 
 import sys
@@ -101,6 +106,9 @@ if __name__ == "__main__":
     # ast = document.getElementsByAtribute("class", "bad")
     # return document
     div = document.createElement('div')
+    div1 = document.createElement('div')
     div.addAtribute(id="igor", className="i")
-    document.getElementById("qwe").appendElem(div)
-    print(document.body().outerHTML())
+    div.appendElem(div1)
+    document.getElementsByClassName("i")[0].after(div)
+    document.getElementById("qwe").addAtribute(id="i")
+    print(document)

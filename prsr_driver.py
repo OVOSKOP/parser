@@ -25,13 +25,23 @@
 
 # styles = getStyle("default.css")
 
+class Text:
+	def __init__(self, text):
+		self.content = text
+		self.parent = None
+		self.level = 0
+
+
+	def __repr__(self):
+		return '%r' % self.content
+
 # Tag
 class Tag:
-	def __init__(self, level, args, is_need_close_tag = True):
+	def __init__(self, args, is_need_close_tag = True):
 		self.content = []
 		self.parent = None
 		self.args = args
-		self.level = level
+		self.level = 0
 		self.name = args[0][0]
 		self.atrs = {}
 		# self.atrs["style"] = {}
@@ -40,6 +50,10 @@ class Tag:
 			for atr in args[1:]:
 				if atr[0][0][0] == 'style':
 					pass
+				elif atr[0][0][0] == 'class' or \
+					 atr[0][0][0] == 'id':
+					self.atrs.update(
+						{atr[0][0][0]: atr[0][1][0].replace('"', '').split(" ")})
 				else:
 					self.atrs[atr[0][0][0]] = atr[0][1][0].replace('"', '')
 		#               **** STYLES ****
@@ -55,7 +69,7 @@ class Tag:
 		# for atr in self.atrs:
 		# 	line += f"\n{tabs}  {atr + ' : ' + self.atrs[atr]}"
 		for item in self.content:
-			line += f"\n{tabs}|____" + '%r' % item
+			line += f"\n{tabs}|____{item}"
 		return line
 
 	def findBy(self, atr = None, value = None, tagName = None):
@@ -69,7 +83,8 @@ class Tag:
 					if atr in elem.atrs:
 						if value:
 						# print(atr, elem.atrs, value)
-							if elem.atrs[atr] == value:
+							if elem.atrs[atr] == value or \
+							   value in elem.atrs[atr]:
 								elems.append(elem)
 						else:
 							elems.append(elem)
@@ -89,7 +104,7 @@ class Tag:
 				line += f"<{elem.name}"
 
 				for atr in elem.atrs:
-					line += f' {atr}="{elem.atrs[atr]}"'
+					line += f' {atr}="{" ".join(elem.atrs[atr])}"'
 
 				
 				line += f">"
@@ -104,7 +119,7 @@ class Tag:
 		line = f"<{self.name}"
 
 		for atr in self.atrs:
-			line += f' {atr}="{self.atrs[atr]}"'
+			line += f' {atr}="{" ".join(self.atrs[atr])}"'
 
 		
 		line += f">"
@@ -119,16 +134,20 @@ class Tag:
 			line += f"</{self.name}>"
 		return line
 
-	def textContent(self):
-		line = ""
-		for elem in self.content:
-			typeElem = str(type(elem)).split("'")[1].split(".")
-			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
-			if typeElem == "Tag":
-					line += elem.textContent()
-			else:
-				line += elem
-		return line
+	def textContent(self, text = None):
+		if not text:
+			line = ""
+			for elem in self.content:
+				typeElem = str(type(elem)).split("'")[1].split(".")
+				typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+				if typeElem == "Tag":
+						line += elem.textContent()
+				else:
+					line += elem
+			return line
+		else:
+			self.content.clear()
+			self.content.append(Text(text))
 
 	def getChild(self):
 		elems = []
@@ -178,19 +197,37 @@ class Tag:
 			if atr == 'style':
 				pass
 			elif atr == "className":
-				self.atrs['class'] = value
+				self.atrs['class'].append(value) if ('class' in self.atrs) else self.atrs.update({'class': [value]})
+			elif atr == "id":
+				self.atrs['id'].append(value) if ('id' in self.atrs) else self.atrs.update({'id': [value]})
 			else:
 				self.atrs[atr] = value
 
 	def appendElem(self, elem):
+		elem.level = self.level + 1
 		self.content.append(elem)
 
-class DOM:
+	def prependElem(self, elem):
+		elem.level = self.level + 1
+		self.content.insert(0, elem)
+
+	def before(self, elem):
+		selfIndex = self.getParent().getChild().index(self)
+		elem.level = self.level
+		self.getParent().content.insert(selfIndex, elem) 
+
+	def after(self, elem):
+		selfIndex = self.getParent().getChild().index(self)
+		elem.level = self.level
+		self.getParent().content.insert(selfIndex + 1, elem)
+
+class Node:
 	def __init__(self, content = None):
 		self.content = []
 		self.type = None
 		self.JS = []
 		self.CSS = []
+		self.level = -1
 		if content:
 			self.content.append(content)
 
@@ -216,6 +253,7 @@ class DOM:
 
 			if typeElem == "Tag":
 				content.parent = tag
+				content.level = tag.level + 1
 
 			tag.content.append(content)
 			return tag
@@ -298,5 +336,7 @@ class DOM:
 		return self.getElementsByTagName("head")[0]
 
 	def createElement(self, name):
-		return Tag(0, [[name]])
+		return Tag([[name]])
+
+
 
