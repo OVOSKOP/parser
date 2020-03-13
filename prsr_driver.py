@@ -1,29 +1,31 @@
 ## ADD STYLES FOR BROWSER ##
 
-# from imp_lexer_css import *
+from imp_lexer_css import *
 
-# def getStyle(filename):
-# 	styles = {}
-# 	tag = 0
-# 	file = open(filename, encoding="utf-8")
-# 	characters = file.read()
-# 	file.close()
+def getStyle(filename):
+	styles = {}
+	tag = 0
+	file = open(filename, encoding="utf-8")
+	characters = file.read()
+	file.close()
 
-# 	tokens = imp_lex_css(characters)
+	tokens = imp_lex_css(characters)
 
-# 	for token in tokens:
-# 		if token[1] == "NAME":
-# 			tag = token[0].split(" ")[0]
-# 			styles[tag] = {}
-# 		if token[1] == "STYLE":
-# 			style = token[0].split(": ")[0]
-# 		if token[1] == "VALUE":
-# 			styles[tag][style] = token[0].split(";")[0]
+	for token in tokens:
+		if token[1] == "NAME":
+			tag = token[0].split(" ")[0]
+			styles[tag] = {}
+		if token[1] == "ITEM":
+			style = token[0].split(": ")[0]
+		if token[1] == "VALUE":
+			styles[tag][style] = token[0].split(";")[0]
 
-# 	return styles
+	return styles
 
 
-# styles = getStyle("default.css")
+styles = getStyle("default.css")
+
+# ***** CLASSES *****
 
 class Text:
 	def __init__(self, text):
@@ -33,7 +35,7 @@ class Text:
 
 
 	def __repr__(self):
-		return '%r' % self.content
+		return self.content
 
 # Tag
 class Tag:
@@ -44,7 +46,7 @@ class Tag:
 		self.level = 0
 		self.name = args[0][0]
 		self.atrs = {}
-		# self.atrs["style"] = {}
+		self.style = styles[self.name] if self.name in styles else {}
 		self.is_need_close_tag = is_need_close_tag
 		if len(args) > 1:
 			for atr in args[1:]:
@@ -69,7 +71,20 @@ class Tag:
 		# for atr in self.atrs:
 		# 	line += f"\n{tabs}  {atr + ' : ' + self.atrs[atr]}"
 		for item in self.content:
-			line += f"\n{tabs}|____{item}"
+			line += f"\n{tabs}|____" + '%r' % item
+		return line
+
+	def getInfo(self):
+		line = f'< {self.tagName()} >\n'
+		line += f'parent: {self.getParent().tagName()}\n'
+		line += f'content: {self.innerHTML()}\n'
+		line += f'atributes: \n'
+		for atr in self.atrs:
+			line += f'\t{atr}: {self.atrs[atr]}\n'
+		line += f'style: \n'
+		for style in self.style:
+			line += f'\t{style}: {self.style[style]}\n'	
+
 		return line
 
 	def findBy(self, atr = None, value = None, tagName = None):
@@ -112,7 +127,7 @@ class Tag:
 					line += elem.innerHTML()
 					line += f"</{elem.name}>"
 			else:
-				line += elem
+				line += f'{elem}'
 		return line
 
 	def outerHTML(self, HTML = None):

@@ -1,14 +1,14 @@
 import lexer
 
 NAME           = 'NAME'
-STYLE          = 'STYLE'
+ITEM           = 'ITEM'
 VALUE          = 'VALUE'
 
 token_exprs = [
     (r'[ \n\t}]+',        None),
     (r'(/\*)[^$]*(\*/)',  None),
     (r'([\w]+|\*)( )*({)',NAME),
-	(r'[\w]+( )*(:)( )?', STYLE),
+	(r'[\w]+( )*(:)( )?', ITEM),
 	(r'[\w]+(;)?',        VALUE),
       
 ]
