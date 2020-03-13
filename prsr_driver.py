@@ -34,7 +34,7 @@ class Tag:
 		self.level = level
 		self.name = args[0][0]
 		self.atrs = {}
-		self.atrs["style"] = {}
+		# self.atrs["style"] = {}
 		self.is_need_close_tag = is_need_close_tag
 		if len(args) > 1:
 			for atr in args[1:]:
@@ -91,10 +91,9 @@ class Tag:
 				for atr in elem.atrs:
 					line += f' {atr}="{elem.atrs[atr]}"'
 
-				if not elem.is_need_close_tag:
-					line += f" />"
-				else:
-					line += f">"
+				
+				line += f">"
+				if elem.is_need_close_tag:
 					line += elem.innerHTML()
 					line += f"</{elem.name}>"
 			else:
@@ -107,10 +106,9 @@ class Tag:
 		for atr in self.atrs:
 			line += f' {atr}="{self.atrs[atr]}"'
 
-		if not self.is_need_close_tag:
-			line += f" />"
-		else:
-			line += f">"
+		
+		line += f">"
+		if self.is_need_close_tag:
 			for elem in self.content:
 				typeElem = str(type(elem)).split("'")[1].split(".")
 				typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
@@ -118,7 +116,7 @@ class Tag:
 					line += elem.outerHTML()
 				else:
 					line += elem
-		line += f"</{self.name}>"
+			line += f"</{self.name}>"
 		return line
 
 	def textContent(self):
@@ -132,7 +130,7 @@ class Tag:
 				line += elem
 		return line
 
-	def getChildren(self):
+	def getChild(self):
 		elems = []
 		for elem in self.content:
 			typeElem = str(type(elem)).split("'")[1].split(".")
@@ -142,11 +140,50 @@ class Tag:
 
 		return elems
 
+	def getFirstChild(self):
+		child = self.getChild()
+		return child[0]
+
+	def getLastChild(self):
+		child = self.getChild()
+		return child[-1]
+
 	def getParent(self):
 		return self.parent
 
 	def tagName(self):
 		return self.name
+
+	def getAtributeValue(self, atributeName):
+		if atributeName in self.atrs:
+			return self.atrs[atributeName]
+		return None
+
+	def previousSibling(self):
+		siblings = self.getParent().getChild()
+
+		if 0 <= siblings.index(self) - 1 < len(siblings):
+			return siblings[siblings.index(self) - 1]
+		return None
+
+	def nextSibling(self):
+		siblings = self.getParent().getChild()
+
+		if 0 <= siblings.index(self) + 1 < len(siblings):
+			return siblings[siblings.index(self) + 1]
+		return None
+
+	def addAtribute(self, **atrs):
+		for atr, value in atrs.items():
+			if atr == 'style':
+				pass
+			elif atr == "className":
+				self.atrs['class'] = value
+			else:
+				self.atrs[atr] = value
+
+	def appendElem(self, elem):
+		self.content.append(elem)
 
 class DOM:
 	def __init__(self, content = None):
@@ -188,9 +225,14 @@ class DOM:
 	def addJS(self, content):
 		self.JS.append(content)
 
+	def getJS(self):
+		return self.JS
+
 	def addCSS(self, content):
 		self.CSS.append(content)
 
+	def getCSS(self):
+		return self.CSS
 
 	def getElementById(self, idName):
 		elems = []
@@ -245,4 +287,16 @@ class DOM:
 	
 	def getParent(self):
 		return None
+
+	def body(self):
+		return self.getElementsByTagName("body")[0]
+
+	def documentElement(self):
+		return self.getElementsByTagName("html")[0]
+
+	def head(self):
+		return self.getElementsByTagName("head")[0]
+
+	def createElement(self, name):
+		return Tag(0, [[name]])
 

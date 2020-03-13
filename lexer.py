@@ -24,16 +24,13 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                         text = lex(text, sub_token_exprs[0], sub_token_exprs)
                     if tag == "ATRIBUTE" and sub_token_exprs:
                         text = lex(text, sub_token_exprs[1], sub_token_exprs)
-                    if tag == "SCRIPT":
-                        match = re.search(r'<\/script>', characters, match.end(0))
+                    if tag == "SCRIPT" or tag == "STYLE":
+                        start = match.end(0)
+                        regex = re.compile(r'<\/(script|style)>')
+                        match = regex.search(characters, match.end(0))
                         if match:
-                            print(match)
-                            break
-                    # if tag == "STYLE":
-                    #     regex = re.compile(r'<\/style>')
-                    #     # print(regex)
-                    #     match = regex.match(characters, match.end(0))
-                    #     print(match)
+                            end = match.start(0)
+                            text = characters[start:end:]
                     token = (text, tag)
                     # print('tag ' + tag)
                     tokens.append(token)

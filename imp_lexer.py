@@ -20,7 +20,7 @@ token_exprs = [
     (r'<style( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>',          STYLE),
     (r'<\/[a-zA-Z0-9]*>',                                     CLOSE_TAG),
     (r'<!DOCTYPE [ a-zA-Z0-9.:\/\-\"]+>',                     TYPE),
-    (r'[^<>\s]+',                                             CONTENT),
+    (r'(([^<>\s])|( ))+',                                     CONTENT),
     (r'<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|' +
     'source|track|wbr)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', TAG),
     (r'<([a-zA-Z0-9]+)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', OPEN_TAG),    
@@ -29,20 +29,14 @@ token_exprs = [
 token_tag = [
 	[
 		(r'[\s<>/]+',             None),
-		(r'[a-zA-Z-]+="[^"\n]*"', ATRIBUTE),
+		(r'[a-zA-Z-]+="[^"]*"',   ATRIBUTE),
     	(r'[\w]+',                TAG_NAME),
     ],
     [
     	(r'[\s=/]+',    None),
 		(r'[a-zA-Z-]+', ATRIBUTE_NAME),
-    	(r'"[^"\n]*"',  VALUE),
+    	(r'"[^"]*"',    VALUE),
     ],
-    # [
-    #     (r'[ \n\t]+',                                             None),
-    #     (r'<\/(script|style)>',                                     None),
-    #     (r'<(script|style)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', None), 
-    #     (r'(([\s\w\W]))+',                                               CONTENT),
-    # ]
 ]
 
 def imp_lex(characters):

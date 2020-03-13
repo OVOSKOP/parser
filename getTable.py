@@ -26,9 +26,9 @@ if __name__ == "__main__":
         elems = document.getElementsByAtributeName("title", name)
         table["marks"][name] = []
         for elem in elems:
-            child = elem.getChildren()
+            child = elem.getChild()
             if len(child) > 0:
-                table["marks"][name].append(child[0].atrs["value"])
+                table["marks"][name].append(child[0].getAtributeValue("value"))
             else:
                 table["marks"][name].append(elem.textContent())
     print(table)

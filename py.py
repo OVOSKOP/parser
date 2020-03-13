@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.1.17
+##	HTML PARSER V.2.1.37
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -42,7 +42,7 @@
 ##					[] - list of elements
 ##
 ##
-##		TAG:
+##		TAG(methods):
 ##			innerHTML() - Return the HTML markup of child elements.
 ##				OUTPUT:
 ##					html - html of elements
@@ -55,7 +55,7 @@
 ##				OUTPUT:
 ##					text - text of elements and its childrens
 ##
-##			getChildren() - Returns a list of children.
+##			getChild() - Returns a list of childn.
 ##				OUTPUT:
 ##					[] - list of elements
 ##
@@ -66,6 +66,22 @@
 ##			tagName() - Returns the HTML element tag
 ##				OUTPUT:
 ##					str - name of elements
+##          getAtributeValue(atributeName) - return value of atribute if it exist
+##              INPUT:
+##                  atributeName - Required.
+##              OUTPUT:
+##                  value - value of atribute
+##
+##
+##
+##
+##          
+##  PLANS:: 
+##          previousSibling, nextSibling - COMPLETED 13.03.2020
+##          createElement(name) - COMPLETED 13.03.2020
+##          TAG::before , prepend , !``append``! , after - add tag
+##          TAG::addAtribute(**kwargs)
+##          TAG:: id, class --- array
 ##
 
 import sys
@@ -79,10 +95,12 @@ if __name__ == "__main__":
     characters = file.read()
     file.close()
     tokens = imp_lex(characters) #лексируем файл
-    
+    document = imp_prs(tokens) #парсируем файл
     # for token in tokens:
         # print (token)
-    document = imp_prs(tokens) #парсируем файл
     # ast = document.getElementsByAtribute("class", "bad")
     # return document
-    print(document)
+    div = document.createElement('div')
+    div.addAtribute(id="igor", className="i")
+    document.getElementById("qwe").appendElem(div)
+    print(document.body().outerHTML())
