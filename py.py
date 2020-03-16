@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.1.37
+##	HTML PARSER V.2.1.73
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -105,10 +105,10 @@ if __name__ == "__main__":
         # print (token)
     # ast = document.getElementsByAtribute("class", "bad")
     # return document
-    div = document.createElement('div')
-    div1 = document.createElement('div')
-    div.addAtribute(id="igor", className="i")
-    div.appendElem(div1)
-    document.getElementsByClassName("i")[0].after(div)
-    document.getElementById("qwe").addAtribute(id="i")
-    print(document)
+    # div = document.createElement('div')
+    # div1 = document.createElement('div')
+    # div.addAtribute(id="igor", className="i")
+    # div.appendElem(div1)
+    # document.getElementsByClassName("i")[0].after(div)
+    # document.getElementById("qwe").addAtribute(id="i")
+    print(document.getElementById("qwe").getInfo())

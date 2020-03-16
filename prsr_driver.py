@@ -1,6 +1,7 @@
 ## ADD STYLES FOR BROWSER ##
 
 from imp_lexer_css import *
+from through_dict import *
 
 def getStyle(filename):
 	styles = {}
@@ -23,7 +24,7 @@ def getStyle(filename):
 	return styles
 
 
-styles = getStyle("default.css")
+# styles = getStyle("default.css")
 
 # ***** CLASSES *****
 
@@ -40,13 +41,18 @@ class Text:
 # Tag
 class Tag:
 	def __init__(self, args, is_need_close_tag = True):
+		global styles
 		self.content = []
 		self.parent = None
 		self.args = args
 		self.level = 0
 		self.name = args[0][0]
 		self.atrs = {}
-		self.style = styles[self.name] if self.name in styles else {}
+		self.style = {}
+		if '*' in styles:
+			self.style.update(styles['*'])
+		if self.name in styles:
+			self.style.update(styles[self.name])
 		self.is_need_close_tag = is_need_close_tag
 		if len(args) > 1:
 			for atr in args[1:]:
@@ -55,13 +61,13 @@ class Tag:
 				elif atr[0][0][0] == 'class' or \
 					 atr[0][0][0] == 'id':
 					self.atrs.update(
-						{atr[0][0][0]: atr[0][1][0].replace('"', '').split(" ")})
+						{atr[0][0][0]: atr[0][1][0].split(" ")})
 				else:
-					self.atrs[atr[0][0][0]] = atr[0][1][0].replace('"', '')
+					self.atrs[atr[0][0][0]] = atr[0][1][0]
 		#               **** STYLES ****
-		# if self.name == "link" and "rel" in self.atrs:
-		# 	if self.atrs["rel"] == "stylesheet":
-		# 		styles.update(getStyle(self.atrs["href"]))
+		if self.name == "link" and "rel" in self.atrs:
+			if self.atrs["rel"] == "stylesheet":
+				styles = updateDict(styles, getStyle(self.atrs["href"]))
 
 
 	def __repr__(self):
@@ -352,6 +358,9 @@ class Node:
 
 	def createElement(self, name):
 		return Tag([[name]])
+
+	def getStyles(self):
+		return styles
 
 
 

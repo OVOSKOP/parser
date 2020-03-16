@@ -15,27 +15,27 @@ VALUE         = 'VALUE'
 
 token_exprs = [
     (r'[ \n\t]+',                                             None),
-    (r'<!--[^$]*-->',                                         None),
-    (r'<script( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>',         SCRIPT),
-    (r'<style( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>',          STYLE),
-    (r'<\/[a-zA-Z0-9]*>',                                     CLOSE_TAG),
-    (r'<!DOCTYPE [ a-zA-Z0-9.:\/\-\"]+>',                     TYPE),
+    (r'<!--.*(?=-->)-->',                                     None),
+    (r'<script( )?([-\w ]+="[^>]*(?=")")*(( )?/)?>',         SCRIPT),
+    (r'<style( )?([-\w ]+="[^>]*(?=")")*(( )?/)?>',          STYLE),
+    (r'<\/[\w-]*>',                                           CLOSE_TAG),
+    (r'<!DOCTYPE [ \w.:\/\-\"]+>',                     TYPE),
     (r'(([^<>\s])|( ))+',                                     CONTENT),
     (r'<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|' +
-    'source|track|wbr)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', TAG),
-    (r'<([a-zA-Z0-9]+)( )?([-a-zA-Z ]+="([^"])*")*(( )?/)?>', OPEN_TAG),    
+    'source|track|wbr)( )?([:a-zA-Z- ]+="[^>]*(?=")")*(( )?/)?>', TAG),
+    (r'<([\w-]+)( )?([-\w: ]+="[^>]*(?=")")*(( )?/)?>',       OPEN_TAG),    
 ]
 
 token_tag = [
 	[
-		(r'[\s<>/]+',             None),
-		(r'[a-zA-Z-]+="[^"]*"',   ATRIBUTE),
-    	(r'[\w]+',                TAG_NAME),
+		(r'[\s<>/]+',           None),
+		(r'[\w:-]+="[^"]*(?=")"', ATRIBUTE),
+    	(r'[\w-]+',             TAG_NAME),
     ],
     [
-    	(r'[\s=/]+',    None),
-		(r'[a-zA-Z-]+', ATRIBUTE_NAME),
-    	(r'"[^"]*"',    VALUE),
+    	(r'[\s=/"]+',     None),
+		(r'[\w:-]+(?==")', ATRIBUTE_NAME),
+    	(r'(?<=")[^"]*(?=")',     VALUE),
     ],
 ]
 

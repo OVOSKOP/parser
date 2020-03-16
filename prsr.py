@@ -6,6 +6,7 @@ def parser(tokens):
 	level = 0
 	doc = Node()
 	for token in tokens:
+		# print(token)
 		if token[1] == 'OPEN_TAG':
 			buff.append(token[0][0][0])
 			doc.addItem(level, Tag(args=token[0]))
@@ -15,7 +16,8 @@ def parser(tokens):
 				buff.pop()
 				level -= 1
 			else:
-				sys.stderr.write('Illegal character: %s\n' % token[0])
+				# print( buff[-1])
+				sys.stderr.write('Illegal token: %s\n' % str(token))
 				sys.exit(1)
 		else:
 			if token[1] == 'TAG':

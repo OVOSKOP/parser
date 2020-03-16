@@ -20,6 +20,7 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                 # print('match' + match)
                 text = match.group(0)
                 if tag:
+                    # print(text, tag)
                     if (tag == "TAG" or tag == "CLOSE_TAG" or tag == "OPEN_TAG") and sub_token_exprs:
                         text = lex(text, sub_token_exprs[0], sub_token_exprs)
                     if tag == "ATRIBUTE" and sub_token_exprs:
@@ -32,11 +33,12 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                             end = match.start(0)
                             text = characters[start:end:]
                     token = (text, tag)
-                    # print('tag ' + tag)
+                    # print("\n\n")
+                    # print(token, pos)
                     tokens.append(token)
                 break
         if not match:
-            sys.stderr.write('Illegal character: "%s" ' % (characters[pos] + characters[pos + 1] + characters[pos + 2] + characters[pos + 3]) + 'in pos: %s\n' % str(pos))
+            sys.stderr.write('Illegal character: "%s" ' % (characters[pos]) + 'in pos: %s\n' % str(pos))
             sys.exit(1)
         else:
             pos = match.end(0)
