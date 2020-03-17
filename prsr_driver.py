@@ -162,7 +162,7 @@ class Tag:
 				typeElem = str(type(elem)).split("'")[1].split(".")
 				typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
 				if typeElem == "Tag":
-						line += elem.textContent()
+					line += elem.textContent()
 				else:
 					line += str(elem)
 			return line
