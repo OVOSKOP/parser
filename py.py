@@ -111,4 +111,4 @@ if __name__ == "__main__":
     # div.appendElem(div1)
     # document.getElementsByClassName("i")[0].after(div)
     # document.getElementById("qwe").addAtribute(id="i")
-    print(document.body())
+    print(document.body().getInfo())
