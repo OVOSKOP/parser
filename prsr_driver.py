@@ -33,6 +33,7 @@ class Text:
 		self.content = text
 		self.parent = None
 		self.level = 0
+		self.levels = []
 
 
 	def __repr__(self):
@@ -46,6 +47,7 @@ class Tag:
 		self.parent = None
 		self.args = args
 		self.level = 0
+		self.levels = []
 		self.name = args[0][0]
 		self.atrs = {}
 		self.style = {}
@@ -71,13 +73,25 @@ class Tag:
 
 
 	def __repr__(self):
-		tabs = ''.join(['     ' for i in range(self.level)])
+		# print(self.name, self.level, self.levels)
+		tabs = ""
+		if self.level >= 1:
+			tabs = ''.join(['|    ' if self.levels[i] else '     ' for i in range(self.level)])
 		line = f"{self.name}"
 		# atributes
 		# for atr in self.atrs:
 		# 	line += f"\n{tabs}  {atr + ' : ' + self.atrs[atr]}"
 		for item in self.content:
+			typeElem = str(type(item)).split("'")[1].split(".")
+			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
+			item.level = self.level + 1
+			if self.content.index(item) < len(self.content) - 1:
+				item.levels = [*self.levels, 1]
+			else:
+				item.levels = [*self.levels, 0]
 			line += f"\n{tabs}|____" + '%r' % item
+		self.level = 0
+		self.levels = []
 		return line
 
 	def getInfo(self):
@@ -274,7 +288,6 @@ class Node:
 
 			if typeElem == "Tag":
 				content.parent = tag
-				content.level = tag.level + 1
 
 			tag.content.append(content)
 			return tag
