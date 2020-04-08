@@ -1,30 +1,38 @@
 ## ADD STYLES FOR BROWSER ##
 
-from imp_lexer_css import *
-from through_dict import *
+# from imp_lexer_css import *
 
-def getStyle(filename):
-	styles = {}
-	tag = 0
-	file = open(filename, encoding="utf-8")
-	characters = file.read()
-	file.close()
+# def getStyle(filename):
+# 	styles = {}
+# 	tag = 0
+# 	file = open(filename, encoding="utf-8")
+# 	characters = file.read()
+# 	file.close()
 
-	tokens = imp_lex_css(characters)
+# 	tokens = imp_lex_css(characters)
 
-	for token in tokens:
-		if token[1] == "NAME":
-			tag = token[0].split(" ")[0]
-			styles[tag] = {}
-		if token[1] == "ITEM":
-			style = token[0].split(": ")[0]
-		if token[1] == "VALUE":
-			styles[tag][style] = token[0].split(";")[0]
+# 	for token in tokens:
+# 		if token[1] == "NAME":
+# 			tag = token[0].split(" ")[0]
+# 			styles[tag] = {}
+# 		if token[1] == "ITEM":
+# 			style = token[0].split(": ")[0]
+# 		if token[1] == "VALUE":
+# 			styles[tag][style] = token[0].split(";")[0]
 
-	return styles
+# 	return styles
 
 styles = {}
 # styles = getStyle("default.css")
+
+def updateDict(dictTo, dictFrom):
+	for item in dictFrom:
+		if item in dictTo:
+			dictTo[item].update(dictFrom[item])
+		else:
+			dictTo.update({item: dictFrom[item]})
+
+	return dictTo
 
 # ***** CLASSES *****
 

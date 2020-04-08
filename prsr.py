@@ -1,4 +1,3 @@
-import sys
 from prsr_driver import *
 
 def parser(tokens):
