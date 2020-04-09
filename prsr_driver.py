@@ -245,24 +245,29 @@ class Tag:
 				self.atrs['id'].append(value) if ('id' in self.atrs) else self.atrs.update({'id': [value]})
 			else:
 				self.atrs[atr] = value
+		return True
 
 	def appendElem(self, elem):
 		elem.level = self.level + 1
 		self.content.append(elem)
+		return True
 
 	def prependElem(self, elem):
 		elem.level = self.level + 1
 		self.content.insert(0, elem)
+		return True
 
 	def before(self, elem):
 		selfIndex = self.getParent().getChild().index(self)
 		elem.level = self.level
-		self.getParent().content.insert(selfIndex, elem) 
+		self.getParent().content.insert(selfIndex, elem)
+		return True
 
 	def after(self, elem):
 		selfIndex = self.getParent().getChild().index(self)
 		elem.level = self.level
 		self.getParent().content.insert(selfIndex + 1, elem)
+		return True
 
 class Node:
 	def __init__(self, content = None):
