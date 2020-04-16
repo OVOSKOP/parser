@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.0
+##	HTML PARSER V.2.3.1.15
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -120,64 +120,93 @@ if __name__ == "__main__":
 
 	main = True
 	while main:
+		error = 0
 		command = input(">>> ")
 		if command == 'quit' or command == 'quit()':
-			break
+			main = False
 		elif command == 'help' or command == 'help()':
 			for module in functions:
 				print(module + ".")
 				for f in list(functions[module].keys()):
-					print('\t' + f)
+					func = functions[module][f]
+					args_reqs = inspect.getfullargspec(func).args
+					if 'self' in args_reqs:
+						args_reqs.remove('self')
+					print('\t' + f + '(' + ", ".join(args_reqs) + ')')
 			print("quit")
 		else:
-			if '.' in command or '=' in command:
+			if '.' in command:
+				# print(command.rsplit(".", maxsplit=1))
 				new_var = None
 				if '=' in command:
 					[new_var, command] = command.split("=")
 					new_var = new_var.replace(" ", "")
-				[var, method] = command.split(".")
+				[var, methods_str] = command.split(".", maxsplit=1)
 				var = var.replace(" ", "")
-				f = method.split("(")[0]
-				regex = re.compile(r'(?<=\().+(?=\))')
-				match = regex.search(method)
-				args = match.group(0).split(", ") if match else ""
+				methods = methods_str.split(".")
 				if var in globals():
-					modl = str(type(globals()[var])).split('.')[1].split("'")[0]
-					if f in functions[modl]:
-						func = functions[modl][f]
-						args_reqs = inspect.getfullargspec(func).args
-						if 'self' in args_reqs:
-							args_reqs.remove('self')
-						# print(args_reqs)
-						curr_args = []
-						i = 0
-						for args_req in args_reqs:
-							if i < len(args):
-								if args[i][0] == " ":
-									args[i] = args[i][1::]
-								arg = int(args[i]) if args[i][1::].isdigit() else args[i]
-								curr_args.append(arg)
-								
-								i += 1
+					interVar = globals()[var]
+					for method in methods:
+						f = method.split("(")[0]
+						regex = re.compile(r'(?<=\().+(?=\))')
+						match = regex.search(method)
+						args = match.group(0).split(", ") if match else ""
+						modl = str(type(interVar)).split('.')[1].split("'")[0]
+						if f in functions[modl]:
+							func = functions[modl][f]
+							args_reqs = inspect.getfullargspec(func).args
+							if 'self' in args_reqs:
+								args_reqs.remove('self')
+							# print(args_reqs)
+							curr_args = []
+							i = 0
+							for args_req in args_reqs:
+								if i < len(args):
+									if args[i][0] == " ":
+										args[i] = args[i][1::]
+									arg = int(args[i]) if args[i][1::].isdigit() else args[i]
+									curr_args.append(arg)
+									
+									i += 1
 
-						if len(curr_args) < len(args_reqs):
-							print("missing " + str(len(args_reqs[len(curr_args)::])) + " required positional arguments: " + str(*args_reqs[len(curr_args)::]))
-							continue
-						if new_var:
-							globals()[new_var] = func(globals()[var], *curr_args)
-						else:
-							if curr_args[0] in globals():
-								print(func(globals()[var], globals()[curr_args[0]]))
+							if len(curr_args) < len(args_reqs):
+								print("missing " + str(len(args_reqs[len(curr_args)::])) + " required positional arguments: " + str(*args_reqs[len(curr_args)::]))
+								continue
+
+							if len(curr_args) > 0:
+								if curr_args[0] in globals():
+									interVar = func(interVar, globals()[curr_args[0]])
+								else:
+									interVar = func(interVar, *curr_args)
 							else:
-								print(func(globals()[var], *curr_args))
-					else:
-						print("Unknown command: " + f)
+								interVar = func(interVar)
+
+						else:
+							print("Unknown command: " + f)
+							error = 1
+							break
+							
+					if not error:
+						if new_var:
+							globals()[new_var] = interVar
+						else:
+							print(interVar)
+						
 				else:
 					print("Unknown variable: " + var)
 			else:
-				if command in globals():
-					print(globals()[command])
-				else:
-					print("Unknown command: " + command)
+				if '=' in command:
+					[new_var, command] = command.split("=")
+					new_var = new_var.replace(" ", "")
+					command = command.replace(" ", "")
+					if command in globals():
+						globals()[new_var] = globals()[command]
+					else:
+						print("Unknown command: " + command)
+				else:	
+					if command in globals():
+						print(globals()[command])
+					else:
+						print("Unknown command: " + command)
 					
 	# print(functions)

@@ -38,7 +38,7 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                     tokens.append(token)
                 break
         if not match:
-            sys.stderr.write('Illegal character: "%s" ' % (characters[pos]) + 'in pos: %s\n' % str(pos))
+            sys.stderr.write('Illegal character: "%s" ' % (characters[pos] +  characters[pos+1] + "   " + characters) + 'in pos: %s\n' % str(pos))
             sys.exit(1)
         else:
             pos = match.end(0)

@@ -71,9 +71,9 @@ class Tag:
 				elif atr[0][0][0] == 'class' or \
 					 atr[0][0][0] == 'id':
 					if len(atr[0]) - 1 > 0:
-						self.atrs.update({atr[0][0][0]: atr[0][1][0].split(" ")})
+						self.atrs.update({atr[0][0][0]: atr[0][1][0].split("\"")[1].split(" ")})
 				else:
-					self.atrs[atr[0][0][0]] = atr[0][1][0] if len(atr[0]) - 1 > 0 else "" 
+					self.atrs[atr[0][0][0]] = atr[0][1][0].split("\"")[1] if len(atr[0]) - 1 > 0 else "" 
 		#               **** STYLES ****
 		# if self.name == "link" and "rel" in self.atrs:
 		# 	if self.atrs["rel"] == "stylesheet":
@@ -103,15 +103,15 @@ class Tag:
 		return line
 
 	def getInfo(self):
-		line = f'< {self.tagName()} >\n'
-		line += f'parent: {self.getParent().tagName()}\n'
-		line += f'content: {self.innerHTML()}\n'
-		line += f'atributes: \n'
+		line = "\033[47m\033[30m{}\033[40m\033[37m".format(f'< {self.tagName()} >')
+		line += f'\n\tparent: < {self.getParent().tagName()} >\n'
+		line += f'\tcontent: {self.innerHTML()}\n'
+		line += f'\tatributes: \n'
 		for atr in self.atrs:
-			line += f'\t{atr}: {self.atrs[atr]}\n'
-		line += f'style: \n'
+			line += f'\t\t{atr}: {self.atrs[atr]}\n'
+		line += f'\tstyle: \n'
 		for style in self.style:
-			line += f'\t{style}: {self.style[style]}\n'	
+			line += f'\t\t{style}: {self.style[style]}\n'	
 
 		return line
 
