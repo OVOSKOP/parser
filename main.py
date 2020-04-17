@@ -84,9 +84,9 @@
 ##          TAG:: id, class --- array - COMPLETED 14.03.2020 
 ##          TAG:: levels - COMPLETED 14.03.2020
 ##          create class::TEXT - COMPLETED 14.03.2020
-##
-## 
-##
+##			
+## 			add (class=qwe) - 
+##			add documentation - 
 ##
 
 import sys
@@ -139,8 +139,6 @@ if __name__ == "__main__":
 					if 'self' in args_reqs:
 						args_reqs.remove('self')
 					print("{ " + module + " }" + "." + f + '(' + ", ".join(args_reqs) + ')' + (func.__doc__ if func.__doc__ else ""))
-					if inspect.getfullargspec(func).defaults:
-						print(len(inspect.getfullargspec(func).defaults))
 			print("quit")
 		else:
 			if '.' in command:
