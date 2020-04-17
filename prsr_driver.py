@@ -103,6 +103,11 @@ class Tag:
 		return line
 
 	def getInfo(self):
+		""" - get info about tag
+	
+	OUTPUT:
+		str - info about tag
+		"""
 		line = "\033[47m\033[30m{}\033[40m\033[37m".format(f'< {self.tagName()} >')
 		line += f'\n\tparent: < {self.getParent().tagName()} >\n'
 		line += f'\tcontent: {self.innerHTML()}\n'
@@ -115,7 +120,7 @@ class Tag:
 
 		return line
 
-	def findBy(self, atr = None, value = None, tagName = None):
+	def _findBy(self, atr = None, value = None, tagName = None):
 		elems = []
 		for elem in self.content:
 			typeElem = str(type(elem)).split("'")[1].split(".")
@@ -131,14 +136,19 @@ class Tag:
 								elems.append(elem)
 						else:
 							elems.append(elem)
-					elems.extend(elem.findBy(atr, value))
+					elems.extend(elem._findBy(atr, value))
 				else:
 					if elem.name == tagName:
 						elems.append(elem)
-					elems.extend(elem.findBy(tagName=tagName))
+					elems.extend(elem._findBy(tagName=tagName))
 		return elems
 
 	def innerHTML(self, HTML = None):
+		""" - Return the HTML markup of child elements.
+	
+	OUTPUT:
+		html - html of elements
+		"""
 		line = ""
 		for elem in self.content:
 			typeElem = str(type(elem)).split("'")[1].split(".")
@@ -155,7 +165,7 @@ class Tag:
 					line += elem.innerHTML()
 					line += f"</{elem.name}>"
 			else:
-				line += f'{elem}'
+				line += f'{str(elem)}'
 		return line
 
 	def outerHTML(self, HTML = None):
@@ -173,7 +183,7 @@ class Tag:
 				if typeElem == "Tag":
 					line += elem.outerHTML()
 				else:
-					line += elem
+					line += f'{str(elem)}'
 			line += f"</{self.name}>"
 		return line
 
@@ -286,13 +296,13 @@ class Node:
 			# line += str(styles)
 		return line
 
-	def setType(self, typeDOM):
+	def _setType(self, typeDOM):
 		self.type = typeDOM.split(" ")[1].split(">")[0]
 
 	def getType(self):
 		return self.type
 
-	def addItem(self, level, content, tag = None, current_level = 0):
+	def _addItem(self, level, content, tag = None, current_level = 0):
 		if not tag:
 			tag = self
 		if level == current_level:
@@ -304,16 +314,16 @@ class Node:
 
 			tag.content.append(content)
 			return tag
-		tag.content[len(tag.content) - 1] = self.addItem(level, content, tag.content[len(tag.content) - 1], current_level + 1)
+		tag.content[len(tag.content) - 1] = self._addItem(level, content, tag.content[len(tag.content) - 1], current_level + 1)
 		return tag
 
-	def addJS(self, content):
+	def _addJS(self, content):
 		self.JS.append(content)
 
 	def getJS(self):
 		return self.JS
 
-	def addCSS(self, content):
+	def _addCSS(self, content):
 		self.CSS.append(content)
 
 	def getCSS(self):
@@ -328,7 +338,7 @@ class Node:
 				if 'id' in elem.atrs:
 					if elem.atrs['id'] == idName:
 						elems.append(elem)
-				elems.extend(elem.findBy('id', idName))
+				elems.extend(elem._findBy('id', idName))
 
 		return elems[0] if len(elems) > 0 else elems
 
@@ -341,7 +351,7 @@ class Node:
 				if 'class' in elem.atrs:
 					if elem.atrs['class'] == idName:
 						elems.append(elem)
-				elems.extend(elem.findBy('class', className))
+				elems.extend(elem._findBy('class', className))
 
 		return elems
 
@@ -353,7 +363,7 @@ class Node:
 			if typeElem == "Tag":
 				if elem.name == tagName:
 					elems.append(elem)
-				elems.extend(elem.findBy(tagName=tagName))
+				elems.extend(elem._findBy(tagName=tagName))
 
 		return elems
 
@@ -366,7 +376,7 @@ class Node:
 				if atr in elem.atrs:
 					if elem.atrs[atr] == value:
 						elems.append(elem)
-				elems.extend(elem.findBy(atr, value))
+				elems.extend(elem._findBy(atr, value))
 
 		return elems
 	

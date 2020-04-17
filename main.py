@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.15
+##	HTML PARSER V.2.3.1.101
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -90,6 +90,7 @@
 ##
 
 import sys
+import os.path
 import re
 import inspect
 from parserHTML import *
@@ -99,9 +100,15 @@ kernel32 = ctypes.windll.kernel32
 kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 
 if __name__ == "__main__":
-	print("HTML Parser v.2.2.2 (released 09.04.2020 18:25). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.101 (released 09.04.2020 18:25). Created by OVOSKOP.")
 	print('Type "help" for more information.')
-	filename = input("\nName of HTML file: ")
+	filename = input("\nName of HTML file ('q' - exit): ")
+
+	while not os.path.isfile(filename) and filename != 'q':
+		filename = input("\n\033[41m{}\033[40m\n".format("File '" + filename +"' is not exist.") + "\nPlease enter correct name of HTML file ('q' - exit): ")
+	
+	if filename == 'q':
+		sys.exit()
 
 	document = parserHTML(filename) #парсируем файл
 
@@ -111,11 +118,11 @@ if __name__ == "__main__":
 	functions = {}
 	g = globals().copy()
 	for module in g.keys():
-		if str(g[module]).find('class') != -1:
+		if str(g[module]).find('class') != -1 and module != 'Text':
 			mod = g[module].__dict__
 			functions[module] = {}
 			for item in mod:
-				if str(mod[item]).find('function') != -1:
+				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
 	main = True
@@ -126,13 +133,14 @@ if __name__ == "__main__":
 			main = False
 		elif command == 'help' or command == 'help()':
 			for module in functions:
-				print(module + ".")
 				for f in list(functions[module].keys()):
 					func = functions[module][f]
 					args_reqs = inspect.getfullargspec(func).args
 					if 'self' in args_reqs:
 						args_reqs.remove('self')
-					print('\t' + f + '(' + ", ".join(args_reqs) + ')')
+					print("{ " + module + " }" + "." + f + '(' + ", ".join(args_reqs) + ')' + (func.__doc__ if func.__doc__ else ""))
+					if inspect.getfullargspec(func).defaults:
+						print(len(inspect.getfullargspec(func).defaults))
 			print("quit")
 		else:
 			if '.' in command:
@@ -154,7 +162,9 @@ if __name__ == "__main__":
 						modl = str(type(interVar)).split('.')[1].split("'")[0]
 						if f in functions[modl]:
 							func = functions[modl][f]
-							args_reqs = inspect.getfullargspec(func).args
+							argspec = inspect.getfullargspec(func)
+							args_reqs = argspec.args
+							def_args = argspec.defaults
 							if 'self' in args_reqs:
 								args_reqs.remove('self')
 							# print(args_reqs)
@@ -164,9 +174,14 @@ if __name__ == "__main__":
 								if i < len(args):
 									if args[i][0] == " ":
 										args[i] = args[i][1::]
+
 									arg = int(args[i]) if args[i][1::].isdigit() else args[i]
 									curr_args.append(arg)
-									
+								else:
+									if def_args:
+										if i >= len(args_reqs) - len(def_args):
+											arg = def_args[len(args_reqs) - len(def_args) - i]
+											curr_args.append(arg)
 									i += 1
 
 							if len(curr_args) < len(args_reqs):
