@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.101
+##	HTML PARSER V.2.3.1.204
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -85,7 +85,7 @@
 ##          TAG:: levels - COMPLETED 14.03.2020
 ##          create class::TEXT - COMPLETED 14.03.2020
 ##			
-## 			add (class=qwe) - 
+## 			add (class=qwe) - COMPLETED 18.04.2020
 ##			add documentation - 
 ##
 
@@ -100,7 +100,7 @@ kernel32 = ctypes.windll.kernel32
 kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 
 if __name__ == "__main__":
-	print("HTML Parser v.2.3.1.101 (released 09.04.2020 18:25). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.204 (released 18.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	filename = input("\nName of HTML file ('q' - exit): ")
 
@@ -139,15 +139,18 @@ if __name__ == "__main__":
 					if 'self' in args_reqs:
 						args_reqs.remove('self')
 					print("{ " + module + " }" + "." + f + '(' + ", ".join(args_reqs) + ')' + (func.__doc__ if func.__doc__ else ""))
+					print(inspect.getfullargspec(func))
 			print("quit")
 		else:
 			if '.' in command:
 				# print(command.rsplit(".", maxsplit=1))
 				new_var = None
-				if '=' in command:
-					[new_var, command] = command.split("=")
-					new_var = new_var.replace(" ", "")
+
 				[var, methods_str] = command.split(".", maxsplit=1)
+
+				if '=' in var:
+					[new_var, var] = var.split("=")
+					new_var = new_var.replace(" ", "")
 				var = var.replace(" ", "")
 				methods = methods_str.split(".")
 				if var in globals():
@@ -163,6 +166,7 @@ if __name__ == "__main__":
 							argspec = inspect.getfullargspec(func)
 							args_reqs = argspec.args
 							def_args = argspec.defaults
+							kwargs = argspec.varkw
 							if 'self' in args_reqs:
 								args_reqs.remove('self')
 							# print(args_reqs)
@@ -180,19 +184,32 @@ if __name__ == "__main__":
 										if i >= len(args_reqs) - len(def_args):
 											arg = def_args[len(args_reqs) - len(def_args) - i]
 											curr_args.append(arg)
+								i += 1
+
+							if kwargs:
+								kwargs = {}
+								while i < len(args):
+									[item, value] = args[i].split('=')
+									item.replace(" ", "")
+									value.replace(" ", "")
+									kwargs[item] = value
+
 									i += 1
 
 							if len(curr_args) < len(args_reqs):
 								print("missing " + str(len(args_reqs[len(curr_args)::])) + " required positional arguments: " + str(*args_reqs[len(curr_args)::]))
-								continue
-
+								error = 1
+								break
 							if len(curr_args) > 0:
 								if curr_args[0] in globals():
 									interVar = func(interVar, globals()[curr_args[0]])
 								else:
 									interVar = func(interVar, *curr_args)
 							else:
-								interVar = func(interVar)
+								if not kwargs:
+									interVar = func(interVar)
+								else:
+									interVar = func(interVar, **kwargs)
 
 						else:
 							print("Unknown command: " + f)
