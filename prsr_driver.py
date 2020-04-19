@@ -85,7 +85,8 @@ class Tag:
 		tabs = ""
 		if self.level >= 1:
 			tabs = ''.join(['|    ' if self.levels[i] else '     ' for i in range(self.level)])
-		line = f"{self.name}"
+
+		line = f"{self.name + self._getIdentyAtrs()}"
 		# atributes
 		# for atr in self.atrs:
 		# 	line += f"\n{tabs}  {atr + ' : ' + self.atrs[atr]}"
@@ -102,14 +103,26 @@ class Tag:
 		self.levels = []
 		return line
 
+	def _getIdentyAtrs(self):
+		identy = ""
+		if 'id' in self.atrs:
+			for ids in self.atrs['id']:
+				identy += "#" + ids
+		if 'class' in self.atrs:
+			for classes in self.atrs['class']:
+				identy += "." + classes
+
+		return identy
+
 	def getInfo(self):
 		""" - get info about tag
 	
 	OUTPUT:
 		str - info about tag
 		"""
-		line = "\033[47m\033[30m{}\033[40m\033[37m".format(f'< {self.tagName()} >')
-		line += f'\n\tparent: < {self.getParent().tagName()} >\n'
+		line = "\033[47m\033[30m{}\033[40m\033[37m".format(f'< {self.tagName() + self._getIdentyAtrs()} >')	
+
+		line += f'\n\tparent: < {self.getParent().tagName() + self.getParent()._getIdentyAtrs()} >\n'
 		line += f'\tcontent: {self.innerHTML()}\n'
 		line += f'\tatributes: \n'
 		for atr in self.atrs:
