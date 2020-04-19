@@ -21,7 +21,7 @@ token_exprs = [
     (r'<style( )?([-\w ]+="[^>]*(?=")")*(( )?/)?>',          STYLE),
     (r'<\/[\w-]*>',                                           CLOSE_TAG),
     (r'<!DOCTYPE [ \w.:\/\-\"]+>',                     TYPE),
-    (r'(([^<>\s])|( ))+',                                     CONTENT),
+    (r'(([^<>\s])|( )|( ))+',                                     CONTENT),
     (r'<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|' +
         r'source|track|wbr)( )?([-\w: ]+(="[^>]*(?=")")?)*(( )?/)?>', TAG),
     (r'<([\w-]+)( )?([-\w: ]+(="[^>]*(?=")")?)*(( )?/)?>',       OPEN_TAG),    

@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.210
+##	HTML PARSER V.2.3.1.211
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -119,7 +119,7 @@ def getDocument():
 
 
 if __name__ == "__main__":
-	print("HTML Parser v.2.3.1.210 (released 19.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.211 (released 19.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
