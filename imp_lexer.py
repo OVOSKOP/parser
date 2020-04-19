@@ -32,11 +32,11 @@ token_tag = [
 		(r'[\s<>/]+',           None),
     	(r'(?<=<)[\w-]+',             TAG_NAME),
         (r'(?<=</)[\w-]+',             TAG_NAME),
-        (r'[\w:-]+(="[^"]*(?=")")?', ATRIBUTE),
+        (r'["\w:-]+(="[^"]*(?=")")?', ATRIBUTE),
     ],
     [
     	(r'[\s=]+',     None),
-		(r'^[\w:-]+', ATRIBUTE_NAME),
+		(r'^["\w:-]+', ATRIBUTE_NAME),
     	(r'(?<==)"(?<=")[^"]*(?=")"',     VALUE),
     ],
 ]
