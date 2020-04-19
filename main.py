@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.211
+##	HTML PARSER V.2.3.1.212
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -119,13 +119,6 @@ def getDocument():
 
 
 if __name__ == "__main__":
-	print("HTML Parser v.2.3.1.211 (released 19.04.2020). Created by OVOSKOP.")
-	print('Type "help" for more information.')
-	
-	document = getDocument()
-
-	
-
 	functions = {}
 	g = globals().copy()
 	for module in g.keys():
@@ -135,6 +128,13 @@ if __name__ == "__main__":
 			for item in mod:
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
+
+	print("HTML Parser v.2.3.1.212 (released 19.04.2020). Created by OVOSKOP.")
+	print('Type "help" for more information.')
+	
+	document = getDocument()
+
+	
 
 	main = True
 	while main:
