@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.204
+##	HTML PARSER V.2.3.1.210
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -93,15 +93,14 @@ import sys
 import os.path
 import re
 import inspect
-from parserHTML import *
 import ctypes
+
+from parserHTML import *
 
 kernel32 = ctypes.windll.kernel32
 kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 
-if __name__ == "__main__":
-	print("HTML Parser v.2.3.1.204 (released 18.04.2020). Created by OVOSKOP.")
-	print('Type "help" for more information.')
+def getDocument():
 	filename = input("\nName of HTML file ('q' - exit): ")
 
 	while not os.path.isfile(filename) and filename != 'q':
@@ -114,6 +113,18 @@ if __name__ == "__main__":
 
 	if document:
 		print("\n\033[42m{}\033[40m\n".format("Parsed completed!"))
+
+	return document
+
+
+
+if __name__ == "__main__":
+	print("HTML Parser v.2.3.1.210 (released 19.04.2020). Created by OVOSKOP.")
+	print('Type "help" for more information.')
+	
+	document = getDocument()
+
+	
 
 	functions = {}
 	g = globals().copy()
@@ -131,6 +142,8 @@ if __name__ == "__main__":
 		command = input(">>> ")
 		if command == 'quit' or command == 'quit()':
 			main = False
+		if command == 'new' or command == 'new()':
+			document = getDocument()
 		elif command == 'help' or command == 'help()':
 			for module in functions:
 				for f in list(functions[module].keys()):
@@ -139,11 +152,10 @@ if __name__ == "__main__":
 					if 'self' in args_reqs:
 						args_reqs.remove('self')
 					print("{ " + module + " }" + "." + f + '(' + ", ".join(args_reqs) + ')' + (func.__doc__ if func.__doc__ else ""))
-					print(inspect.getfullargspec(func))
-			print("quit")
+			print("new()")
+			print("quit()")
 		else:
 			if '.' in command:
-				# print(command.rsplit(".", maxsplit=1))
 				new_var = None
 
 				[var, methods_str] = command.split(".", maxsplit=1)
@@ -169,7 +181,6 @@ if __name__ == "__main__":
 							kwargs = argspec.varkw
 							if 'self' in args_reqs:
 								args_reqs.remove('self')
-							# print(args_reqs)
 							curr_args = []
 							i = 0
 							for args_req in args_reqs:
@@ -239,4 +250,3 @@ if __name__ == "__main__":
 					else:
 						print("Unknown command: " + command)
 					
-	# print(functions)

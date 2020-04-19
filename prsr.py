@@ -1,4 +1,5 @@
 from prsr_driver import *
+import sys
 
 def parser(tokens):
 	buff = []
@@ -6,6 +7,7 @@ def parser(tokens):
 	doc = Node()
 	for token in tokens:
 		# print(token)
+
 		if token[1] == 'OPEN_TAG':
 			buff.append(token[0][0][0])
 			doc._addItem(level, Tag(args=token[0]))
@@ -29,6 +31,8 @@ def parser(tokens):
 				doc._setType(token[0])
 			else:
 				doc._addItem(level, Text(token[0]))
+
+		# print(buff)
 	if not level:
 		return doc
 	else:

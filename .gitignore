@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 *.html
 *.css
-*.bat
 # C extensions
 *.so
 
@@ -129,3 +128,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+*.bat

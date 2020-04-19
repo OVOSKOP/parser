@@ -384,13 +384,19 @@ class Node:
 		return None
 
 	def body(self):
-		return self.getElementsByTagName("body")[0]
+		if len(self.getElementsByTagName("body")) > 0:
+			return self.getElementsByTagName("body")[0]
+		return None
 
 	def documentElement(self):
-		return self.getElementsByTagName("html")[0]
+		if len(self.getElementsByTagName("html")) > 0:
+			return self.getElementsByTagName("html")[0]
+		return None
 
 	def head(self):
-		return self.getElementsByTagName("head")[0]
+		if len(self.getElementsByTagName("head")) > 0:
+			return self.getElementsByTagName("head")[0]
+		return None
 
 	def createElement(self, name):
 		return Tag([[name]])
