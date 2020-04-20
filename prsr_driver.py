@@ -64,16 +64,14 @@ class Tag:
 		if self.name in styles:
 			self.style.update(styles[self.name])
 		self.is_need_close_tag = is_need_close_tag
-		if len(args) > 1:
-			for atr in args[1:]:
-				if atr[0][0][0] == 'style':
-					pass
-				elif atr[0][0][0] == 'class' or \
-					 atr[0][0][0] == 'id':
-					if len(atr[0]) - 1 > 0:
-						self.atrs.update({atr[0][0][0]: atr[0][1][0].split("\"")[1].split(" ")})
-				else:
-					self.atrs[atr[0][0][0]] = atr[0][1][0].split("\"")[1] if len(atr[0]) - 1 > 0 else "" 
+		for atr in args[1:]:
+			if atr[1] == "ATRIBUTE":
+				atr_name = atr[0].split('=')[0].replace(' ', '') if '=' in atr[0] else atr[0].replace(' ', '')
+				atr_value = atr[0].split('=')[1]
+				if atr_value[0] == '"' and atr_value[-1] == '"' or atr_value[0] == "'" and atr_value[-1] == "'":
+					atr_value = atr_value[1:-1]
+				self.addAtribute(**{atr_name: atr_value})
+
 		#               **** STYLES ****
 		# if self.name == "link" and "rel" in self.atrs:
 		# 	if self.atrs["rel"] == "stylesheet":
@@ -262,10 +260,8 @@ class Tag:
 		for atr, value in atrs.items():
 			if atr == 'style':
 				pass
-			elif atr == "className":
-				self.atrs['class'].append(value) if ('class' in self.atrs) else self.atrs.update({'class': [value]})
-			elif atr == "id":
-				self.atrs['id'].append(value) if ('id' in self.atrs) else self.atrs.update({'id': [value]})
+			elif atr == "class" or atr == "id":
+				self.atrs[atr].extend(value.split(" ")) if (atr in self.atrs) else self.atrs.update({atr: value.split(" ")})
 			else:
 				self.atrs[atr] = value
 		return True

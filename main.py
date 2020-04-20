@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.220
+##	HTML PARSER V.2.3.1.230
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -116,8 +116,6 @@ def getDocument():
 
 	return document
 
-
-
 if __name__ == "__main__":
 	functions = {}
 	g = globals().copy()
@@ -129,12 +127,10 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.220 (released 19.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.230 (released 19.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
-
-	
 
 	main = True
 	while main:

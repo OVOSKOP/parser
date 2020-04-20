@@ -23,8 +23,6 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                     # print(text, tag)
                     if (tag == "TAG" or tag == "CLOSE_TAG" or tag == "OPEN_TAG") and sub_token_exprs:
                         text = lex(text, sub_token_exprs[0], sub_token_exprs)
-                    if tag == "ATRIBUTE" and sub_token_exprs:
-                        text = lex(text, sub_token_exprs[1], sub_token_exprs)
                     if tag == "SCRIPT" or tag == "STYLE":
                         start = match.end(0)
                         regex = re.compile(r'<\/(script|style)>')
