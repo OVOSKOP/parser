@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.230
+##	HTML PARSER V.2.3.1.235
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -113,8 +113,10 @@ def getDocument():
 
 	if document:
 		print("\n\033[42m{}\033[40m\n".format("Parsed completed!"))
-
-	return document
+		return document
+	else:
+		print("\n\033[41m{}\033[40m\n".format("Parsed not completed! Invalid Encoding!"))
+		return None
 
 if __name__ == "__main__":
 	functions = {}
@@ -127,10 +129,12 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.230 (released 19.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.235 (released 19.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
+	while not document:
+		document = getDocument()
 
 	main = True
 	while main:
@@ -140,6 +144,8 @@ if __name__ == "__main__":
 			main = False
 		elif command == 'new' or command == 'new()':
 			document = getDocument()
+			while not document:
+				document = getDocument()
 		elif command == 'help' or command == 'help()':
 			for module in functions:
 				for f in list(functions[module].keys()):
