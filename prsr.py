@@ -4,6 +4,7 @@ import sys
 def parser(tokens):
 	buff = []
 	level = 0
+	err = 0
 	doc = Node()
 	for token in tokens:
 		# print(token)
@@ -18,8 +19,15 @@ def parser(tokens):
 				level -= 1
 			else:
 				# print( buff[-1])
-				sys.stderr.write('Illegal token: %s\n' % str(token))
-				sys.exit(1)
+				
+				while buff[-1] != token[0][0][0]:
+					buff.pop()
+					level -= 1
+					err += 1
+				buff.pop()
+				level -= 1
+				# sys.stderr.write('Illegal token: %s\n' % str(token))
+				# sys.exit(1)
 		else:
 			if token[1] == 'TAG':
 				doc._addItem(level, Tag(token[0], is_need_close_tag=False))
@@ -33,8 +41,8 @@ def parser(tokens):
 				doc._addItem(level, Text(token[0]))
 
 		# print(buff)
+	# print(level, err)
 	if not level:
-		return doc
-	else:
-		sys.stderr.write('NOT VALID BRACKETS')
-		sys.exit(1)
+		return (doc, err)
+	print("\n\033[41m{}\033[40m\n".format("File not valid!"))
+	return None

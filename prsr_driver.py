@@ -188,7 +188,10 @@ class Tag:
 		line = f"<{self.name}"
 
 		for atr in self.atrs:
-			line += f' {atr}="{" ".join(self.atrs[atr])}"'
+			if atr == "class" or atr == "id":
+				line += f' {atr}="{" ".join(self.atrs[atr])}"'
+			else:
+				line += f' {atr}="{self.atrs[atr]}"'
 
 		
 		line += f">"
@@ -417,6 +420,12 @@ class Node:
 
 	def getStyles(self):
 		return styles
+
+	def tagName(self):
+		return "DOM"
+
+	def _getIdentyAtrs(self):
+		return ""
 
 
 

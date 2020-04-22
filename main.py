@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.243
+##	HTML PARSER V.2.3.1.302 
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -112,10 +112,12 @@ def getDocument():
 	document = parserHTML(filename) #парсируем файл
 
 	if document:
+		(document, err) = document
 		print("\n\033[42m{}\033[40m\n".format("Parsed completed!"))
+		if err:
+			print("\n\033[30m\033[43m{}\033[37m\033[40m\n".format(f"{err} warning!"))
 		return document
 	else:
-		print("\n\033[41m{}\033[40m\n".format("Parsed not completed! Invalid Encoding!"))
 		return None
 
 if __name__ == "__main__":
@@ -129,7 +131,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.243 (released 19.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.302 (released 22.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
