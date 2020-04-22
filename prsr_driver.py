@@ -303,6 +303,7 @@ class Node:
 		self.JS = []
 		self.CSS = []
 		self.level = -1
+		self.warnings = None
 		if content:
 			self.content.append(content)
 
@@ -426,6 +427,12 @@ class Node:
 
 	def _getIdentyAtrs(self):
 		return ""
+
+	def _addWarnings(self, warnings):
+		self.warnings = warnings
+
+	def warnings(self):
+		return self.warnings
 
 
 

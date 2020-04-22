@@ -3,6 +3,7 @@ import re
 
 def lex(characters, token_exprs, sub_token_exprs=None):
     pos = 0
+    lines = None
     tokens = []
     while pos < len(characters):
         match = None
@@ -37,7 +38,7 @@ def lex(characters, token_exprs, sub_token_exprs=None):
                             break
                     token = (text, tag)
                     # print("\n\n")
-                    # print(token, pos)
+                    # print(token, lines)
                     tokens.append(token)
                 break
         if not match:
