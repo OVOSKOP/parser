@@ -17,14 +17,14 @@ VALUE         = 'VALUE'
 token_exprs = [
     (r'[ \n\t]+',                                             None),
     (r'<!--',                                               COMMENT),
-    (r'<script( )?([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>',         SCRIPT),
-    (r'<style( )?([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>',          STYLE),
+    (r'<script( |\n)*([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>',         SCRIPT),
+    (r'<style( |\n)*([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>',          STYLE),
     (r'<\/[\w-]*>',                                           CLOSE_TAG),
     (r'<!DOCTYPE [ \w.:\/\-\"]+>',                     TYPE),
-    (r'(([^<>\s])|( )|( ))+',                                     CONTENT),
+    (r'(([^<>\s])|( )|( )|( ))+',                                     CONTENT),
     (r'<((area)|(base)|(br)|(col(?!g))|(command)|(embed)|(hr)|(img)|(input)|(keygen)|(link)|(meta)|' + 
-        r'(param)|(source)|(track)|(wbr))( )?([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>', TAG),
-    (r'<([\w-]+)( )?([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>',       OPEN_TAG),    
+        r'(param)|(source)|(track)|(wbr))( |\n)*([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>', TAG),
+    (r'<([\w-]+)( |\n)*([-\w: ]+(=(")?[^>]*(")?)?)*(( )?/)?>',       OPEN_TAG),    
 ]
 
 token_tag = [

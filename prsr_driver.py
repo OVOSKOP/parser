@@ -66,8 +66,11 @@ class Tag:
 		self.is_need_close_tag = is_need_close_tag
 		for atr in args[1:]:
 			if atr[1] == "ATRIBUTE":
-				atr_name = atr[0].split('=')[0].replace(' ', '') if '=' in atr[0] else atr[0].replace(' ', '')
-				atr_value = atr[0].split('=')[1]
+				if '=' in atr[0]:
+					atr_name = atr[0].split('=')[0].replace(' ', '') 
+					atr_value = atr[0].split('=')[1]
+				else: 
+					atr[0].replace(' ', '')
 				if atr_value[0] == '"' and atr_value[-1] == '"' or atr_value[0] == "'" and atr_value[-1] == "'":
 					atr_value = atr_value[1:-1]
 				self.addAtribute(**{atr_name: atr_value})
