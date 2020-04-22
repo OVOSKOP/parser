@@ -3,13 +3,7 @@ from prsr import *
 
 encoding = [
 'utf-8',
-'cp500',
-'utf-16',
-'GBK',
 'windows-1251',
-'ASCII',
-'US-ASCII',
-'Big5'
 ]
 
 def parserHTML(filename):
@@ -20,6 +14,8 @@ def parserHTML(filename):
 			file.close()
 		except (UnicodeDecodeError, LookupError):
 			pass
+		else:
+			break
     
 	if characters:
 		tokens = imp_lex(characters) #лексируем файл

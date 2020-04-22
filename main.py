@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.235
+##	HTML PARSER V.2.3.1.240
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -129,7 +129,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.235 (released 19.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.240 (released 19.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()

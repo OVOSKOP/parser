@@ -105,10 +105,12 @@ class Tag:
 		identy = ""
 		if 'id' in self.atrs:
 			for ids in self.atrs['id']:
-				identy += "#" + ids
+				if len(ids) > 0:
+					identy += "#" + ids
 		if 'class' in self.atrs:
 			for classes in self.atrs['class']:
-				identy += "." + classes
+				if len(classes) > 0:
+					identy += "." + classes
 
 		return identy
 
