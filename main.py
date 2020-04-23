@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.430 
+##	HTML PARSER V.2.3.1.450
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.430 (released 23.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.450 (released 23.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
@@ -168,6 +168,10 @@ if __name__ == "__main__":
 		else:
 			if '.' in command:
 				new_var = None
+				index = None
+				if '[' in command:
+					[command, index] = command.split('[')
+					index = int(index.split(']')[0])
 
 				[var, methods_str] = command.split(".", maxsplit=1)
 
@@ -179,94 +183,138 @@ if __name__ == "__main__":
 						error = 1
 				var = var.replace(" ", "")
 				methods = methods_str.split(".")
+				if var in new_vars:
+					interVar = new_vars[var]
+				elif var in globals():
+					interVar = globals()[var]
+				else:
+					print("Unknown variable: " + var)
+					error = 1
 				if not error:
-					if var in globals():
-						interVar = globals()[var]
-						for method in methods:
-							f = method.split("(")[0]
-							regex = re.compile(r'(?<=\().+(?=\))')
-							match = regex.search(method)
-							args = match.group(0).split(", ") if match else ""
-							modl = str(type(interVar)).split('.')[1].split("'")[0]
-							if f in functions[modl]:
-								func = functions[modl][f]
-								argspec = inspect.getfullargspec(func)
-								args_reqs = argspec.args
-								def_args = argspec.defaults
-								kwargs = argspec.varkw
-								if 'self' in args_reqs:
-									args_reqs.remove('self')
-								curr_args = []
-								i = 0
-								for args_req in args_reqs:
-									if i < len(args):
-										if args[i][0] == " ":
-											args[i] = args[i][1::]
+					for method in methods:
+						f = method.split("(")[0]
+						regex = re.compile(r'(?<=\().+(?=\))')
+						match = regex.search(method)
+						args = match.group(0).split(", ") if match else ""
+						modl = str(type(interVar)).split('.')[1].split("'")[0]
+						if f in functions[modl]:
+							func = functions[modl][f]
+							argspec = inspect.getfullargspec(func)
+							args_reqs = argspec.args
+							def_args = argspec.defaults
+							kwargs = argspec.varkw
+							if 'self' in args_reqs:
+								args_reqs.remove('self')
+							curr_args = []
+							i = 0
+							for args_req in args_reqs:
+								if i < len(args):
+									if args[i][0] == " ":
+										args[i] = args[i][1::]
 
-										arg = int(args[i]) if args[i][1::].isdigit() else args[i]
-										curr_args.append(arg)
-									else:
-										if def_args:
-											if i >= len(args_reqs) - len(def_args):
-												arg = def_args[len(args_reqs) - len(def_args) - i]
-												curr_args.append(arg)
+									arg = int(args[i]) if args[i][1::].isdigit() else args[i]
+									curr_args.append(arg)
+								else:
+									if def_args:
+										if i >= len(args_reqs) - len(def_args):
+											arg = def_args[len(args_reqs) - len(def_args) - i]
+											curr_args.append(arg)
+								i += 1
+
+							if kwargs:
+								kwargs = {}
+								while i < len(args):
+									[item, value] = args[i].split('=')
+									item.replace(" ", "")
+									value.replace(" ", "")
+									kwargs[item] = value
+
 									i += 1
 
-								if kwargs:
-									kwargs = {}
-									while i < len(args):
-										[item, value] = args[i].split('=')
-										item.replace(" ", "")
-										value.replace(" ", "")
-										kwargs[item] = value
-
-										i += 1
-
-								if len(curr_args) < len(args_reqs):
-									print("missing " + str(len(args_reqs[len(curr_args)::])) + " required positional arguments: " + str(*args_reqs[len(curr_args)::]))
-									error = 1
-									break
-
-								if len(curr_args) > 0:
-									if curr_args[0] in new_vars:
-										interVar = func(interVar, new_vars[curr_args[0]])
-									else:
-										interVar = func(interVar, *curr_args)
-								else:
-									if not kwargs:
-										interVar = func(interVar)
-									else:
-										interVar = func(interVar, **kwargs)
-
-							else:
-								print("Unknown command: " + f)
+							if len(curr_args) < len(args_reqs):
+								print("missing " + str(len(args_reqs[len(curr_args)::])) + " required positional arguments: " + str(*args_reqs[len(curr_args)::]))
 								error = 1
 								break
-								
-						if not error:
-							if new_var:
+
+							if len(curr_args) > 0:
+								if curr_args[0] in new_vars:
+									interVar = func(interVar, new_vars[curr_args[0]])
+								else:
+									interVar = func(interVar, *curr_args)
+							else:
+								if not kwargs:
+									interVar = func(interVar)
+								else:
+									interVar = func(interVar, **kwargs)
+
+						else:
+							print("Unknown command: " + f)
+							error = 1
+							break
+							
+					if not error:
+						if new_var:
+							if not index:
 								new_vars[new_var] = interVar
 							else:
+								if len(interVar) > index:
+									new_vars[new_var] = interVar[index]
+								else:
+									print("Index out of range: " + str(index))
+						else:
+							if not index:
 								print(interVar)
-							
-					else:
-						print("Unknown variable: " + var)
+							else:
+								if len(interVar) > index:
+									print(interVar[index])
+								else:
+									print("Index out of range: " + str(index))
 			else:
+				index = None
+
+				if '[' in command:
+					[command, index] = command.split('[')
+					index = int(index.split(']')[0])
+
 				if '=' in command:
 					[new_var, command] = command.split("=")
 					new_var = new_var.replace(" ", "")
 					command = command.replace(" ", "")
 					if command in new_vars:
-						new_vars[new_var] = new_vars[command]
+						if not index:
+							new_vars[new_var] = new_vars[command]
+						else:
+							if len(new_vars[command]) > index:
+								new_vars[new_var] = new_vars[command][index]
+							else:
+								print("Index out of range: " + str(index))
 					elif command in globals():
-						new_vars[new_var] = globals()[command]
+						if not index:
+							new_vars[new_var] = globals()[command]
+						else:
+							if len(globals()[command]) > index:
+								new_vars[new_var] = globals()[command][index]
+							else:
+								print("Index out of range: " + str(index))
 					else:
 						print("Unknown command: " + command)
-				else:	
+				else:
 					if command in new_vars:
-						print(new_vars[command])
+						if not index:
+							print(new_vars[command])
+						else:
+							if len(new_vars[command]) > index:
+								print(new_vars[command][index])
+							else:
+								print("Index out of range: " + str(index))
 					elif command in globals():
-						print(globals()[command])
+						if not index:
+							print(globals()[command])
+						else:
+							if len(globals()[command]) > index:
+								print(globals()[command][index])
+							else:
+								print("Index out of range: " + str(index))
 					else:
 						print("Unknown command: " + command)
 					
