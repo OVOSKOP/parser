@@ -63,16 +63,18 @@ class Tag:
 		if self.name in styles:
 			self.style.update(styles[self.name])
 		self.is_need_close_tag = is_need_close_tag
-		for atr in args[1:]:
+		for atr in args[1:]: 
 			if atr[1] == "ATRIBUTE":
+				atr_value = None
 				if '=' in atr[0]:
 					atr_name = atr[0].split('=')[0].replace(' ', '') 
 					atr_value = atr[0].split('=')[1]
 				else: 
-					atr[0].replace(' ', '')
-				if atr_value[0] == '"' and atr_value[-1] == '"' or atr_value[0] == "'" and atr_value[-1] == "'":
-					atr_value = atr_value[1:-1]
-				self.addAtribute(**{atr_name: atr_value})
+					atr_name = atr[0].replace(' ', '')
+				if atr_value:
+					if atr_value[0] == '"' and atr_value[-1] == '"' or atr_value[0] == "'" and atr_value[-1] == "'":
+						atr_value = atr_value[1:-1]
+				self.addAtribute(**{atr_name: (atr_value if atr_value else "")})
 
 		#               **** STYLES ****
 		# if self.name == "link" and "rel" in self.atrs:
@@ -145,7 +147,6 @@ class Tag:
 				if not tagName:
 					if atr in elem.atrs:
 						if value:
-						# print(atr, elem.atrs, value)
 							if elem.atrs[atr] == value or \
 							   value in elem.atrs[atr]:
 								elems.append(elem)
@@ -353,7 +354,7 @@ class Node:
 			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
 			if typeElem == "Tag":
 				if 'id' in elem.atrs:
-					if elem.atrs['id'] == idName:
+					if idName in elem.atrs['id']:
 						elems.append(elem)
 				elems.extend(elem._findBy('id', idName))
 
@@ -366,7 +367,7 @@ class Node:
 			typeElem = typeElem[1] if len(typeElem) > 1 else typeElem[0] 
 			if typeElem == "Tag":
 				if 'class' in elem.atrs:
-					if elem.atrs['class'] == idName:
+					if className in elem.atrs['class']:
 						elems.append(elem)
 				elems.extend(elem._findBy('class', className))
 

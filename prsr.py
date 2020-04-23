@@ -11,7 +11,7 @@ def parser(tokens):
 		# print(token)
 
 		if token[1] == 'OPEN_TAG':
-			tag = Tag(args=token[0])
+			tag = Tag(token[0])
 			doc._addItem(level, tag)
 			buff.append(tag)
 			level += 1

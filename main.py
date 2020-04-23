@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.402 
+##	HTML PARSER V.2.3.1.430 
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -90,6 +90,7 @@
 ##			add KEYWORDS - completed
 ##			add count lines - 
 ##			add correct error parsing - 
+##			add interactive [..]
 ##
 
 import sys
@@ -119,7 +120,7 @@ def getDocument():
 	if document:
 		(document, err) = document
 		print("\n\033[42m{}\033[40m\n".format("Parsed completed!"))
-		if err > 0:
+		if err:
 			print("\033[30m\033[43m{}\033[37m\033[40m\n".format(f"{err} warning!"))
 		return document
 	else:
@@ -136,7 +137,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.402 (released 22.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.430 (released 23.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
@@ -144,6 +145,7 @@ if __name__ == "__main__":
 		document = getDocument()
 
 	main = True
+	new_vars = {}
 	while main:
 		error = 0
 		command = input(">>> ")
@@ -224,9 +226,10 @@ if __name__ == "__main__":
 									print("missing " + str(len(args_reqs[len(curr_args)::])) + " required positional arguments: " + str(*args_reqs[len(curr_args)::]))
 									error = 1
 									break
+
 								if len(curr_args) > 0:
-									if curr_args[0] in globals():
-										interVar = func(interVar, globals()[curr_args[0]])
+									if curr_args[0] in new_vars:
+										interVar = func(interVar, new_vars[curr_args[0]])
 									else:
 										interVar = func(interVar, *curr_args)
 								else:
@@ -242,7 +245,7 @@ if __name__ == "__main__":
 								
 						if not error:
 							if new_var:
-								globals()[new_var] = interVar
+								new_vars[new_var] = interVar
 							else:
 								print(interVar)
 							
@@ -253,12 +256,16 @@ if __name__ == "__main__":
 					[new_var, command] = command.split("=")
 					new_var = new_var.replace(" ", "")
 					command = command.replace(" ", "")
-					if command in globals():
-						globals()[new_var] = globals()[command]
+					if command in new_vars:
+						new_vars[new_var] = new_vars[command]
+					elif command in globals():
+						new_vars[new_var] = globals()[command]
 					else:
 						print("Unknown command: " + command)
 				else:	
-					if command in globals():
+					if command in new_vars:
+						print(new_vars[command])
+					elif command in globals():
 						print(globals()[command])
 					else:
 						print("Unknown command: " + command)
