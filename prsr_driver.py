@@ -53,7 +53,6 @@ class Tag:
 		global styles
 		self.content = []
 		self.parent = None
-		self.args = args
 		self.level = 0
 		self.levels = []
 		self.name = args[0][0]

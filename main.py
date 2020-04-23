@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.400 
+##	HTML PARSER V.2.3.1.402 
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -103,6 +103,8 @@ from parserHTML import *
 kernel32 = ctypes.windll.kernel32
 kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 
+KEYWORDS = ["document", "new", "quit", "help"]
+
 def getDocument():
 	filename = input("\nName of HTML file ('q' - exit): ")
 
@@ -118,7 +120,7 @@ def getDocument():
 		(document, err) = document
 		print("\n\033[42m{}\033[40m\n".format("Parsed completed!"))
 		if err > 0:
-			print("\n\033[30m\033[43m{}\033[37m\033[40m\n".format(f"{err} warning!"))
+			print("\033[30m\033[43m{}\033[37m\033[40m\n".format(f"{err} warning!"))
 		return document
 	else:
 		return None
@@ -134,7 +136,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.400 (released 22.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.402 (released 22.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
@@ -170,7 +172,7 @@ if __name__ == "__main__":
 				if '=' in var:
 					[new_var, var] = var.split("=")
 					new_var = new_var.replace(" ", "")
-					if new_var in ["document"]:
+					if new_var in KEYWORDS:
 						print(f"Incorrect name of var: {new_var}")
 						error = 1
 				var = var.replace(" ", "")

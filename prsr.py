@@ -36,8 +36,10 @@ def parser(tokens):
 				doc._addItem(level, Tag(token[0], is_need_close_tag=False))
 			elif token[1] == 'SCRIPT':
 				doc._addJS(token[0])
+				doc._addItem(level, Tag([['script']]))
 			elif token[1] == 'STYLE':
 				doc._addCSS(token[0])
+				doc._addItem(level, Tag([['style']]))
 			elif token[1] == 'TYPE':
 				doc._setType(token[0])
 			elif token[1] == 'LINE':
@@ -48,6 +50,6 @@ def parser(tokens):
 		# print(buff)
 	# print(level, err)
 	for item in buff:
-		err.append(item)
+		err.append(item.name + item._getIdentyAtrs())
 	doc._addWarnings(err)
 	return (doc, len(err))
