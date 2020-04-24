@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.450
+##	HTML PARSER V.2.3.1.455
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -90,7 +90,7 @@
 ##			add KEYWORDS - completed
 ##			add count lines - 
 ##			add correct error parsing - 
-##			add interactive [..]
+##			add interactive var[..].method
 ##
 
 import sys
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.450 (released 23.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.455 (released 23.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
@@ -171,7 +171,7 @@ if __name__ == "__main__":
 				index = None
 				if '[' in command:
 					[command, index] = command.split('[')
-					index = int(index.split(']')[0])
+					index = index.split(']')[0]
 
 				[var, methods_str] = command.split(".", maxsplit=1)
 
@@ -257,24 +257,30 @@ if __name__ == "__main__":
 							if not index:
 								new_vars[new_var] = interVar
 							else:
-								if len(interVar) > index:
-									new_vars[new_var] = interVar[index]
+								if (str(type(interVar)) == "<class 'list'>"):
+									if len(interVar) > int(index):
+										new_vars[new_var] = interVar[int(index)]
+									else:
+										print("Index out of range: " + index)
 								else:
-									print("Index out of range: " + str(index))
+									print("Index out of range: " + index)
 						else:
 							if not index:
 								print(interVar)
 							else:
-								if len(interVar) > index:
-									print(interVar[index])
+								if (str(type(interVar)) == "<class 'list'>"):
+									if len(interVar) > int(index):
+										print(interVar[int(index)])
+									else:
+										print("Index out of range: " + index)
 								else:
-									print("Index out of range: " + str(index))
+									print("Index out of range: " + index)
 			else:
 				index = None
 
 				if '[' in command:
 					[command, index] = command.split('[')
-					index = int(index.split(']')[0])
+					index = index.split(']')[0]
 
 				if '=' in command:
 					[new_var, command] = command.split("=")
@@ -284,18 +290,24 @@ if __name__ == "__main__":
 						if not index:
 							new_vars[new_var] = new_vars[command]
 						else:
-							if len(new_vars[command]) > index:
-								new_vars[new_var] = new_vars[command][index]
+							if (str(type(new_vars[command])) == "<class 'list'>"):
+								if len(new_vars[command]) > int(index):
+									new_vars[new_var] = new_vars[command][int(index)]
+								else:
+									print("Index out of range: " + index)
 							else:
-								print("Index out of range: " + str(index))
+								print("Index out of range: " + index)
 					elif command in globals():
 						if not index:
 							new_vars[new_var] = globals()[command]
 						else:
-							if len(globals()[command]) > index:
-								new_vars[new_var] = globals()[command][index]
+							if (str(type(globals()[command])) == "<class 'list'>"):
+								if len(globals()[command]) > int(index):
+									new_vars[new_var] = globals()[command][int(index)]
+								else:
+									print("Index out of range: " + index)
 							else:
-								print("Index out of range: " + str(index))
+								print("Index out of range: " + index)
 					else:
 						print("Unknown command: " + command)
 				else:
@@ -303,18 +315,24 @@ if __name__ == "__main__":
 						if not index:
 							print(new_vars[command])
 						else:
-							if len(new_vars[command]) > index:
-								print(new_vars[command][index])
+							if (str(type(new_vars[command])) == "<class 'list'>"):
+								if len(new_vars[command]) > int(index):
+									print(new_vars[command][int(index)])
+								else:
+									print("Index out of range: " + index)
 							else:
-								print("Index out of range: " + str(index))
+								print("Index out of range: " + index)
 					elif command in globals():
 						if not index:
 							print(globals()[command])
 						else:
-							if len(globals()[command]) > index:
-								print(globals()[command][index])
+							if (str(type(globals()[command])) == "<class 'list'>"):
+								if len(globals()[command]) > int(index):
+									print(globals()[command][int(index)])
+								else:
+									print("Index out of range: " + index)
 							else:
-								print("Index out of range: " + str(index))
+								print("Index out of range: " + index)
 					else:
 						print("Unknown command: " + command)
 					
