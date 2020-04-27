@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.455
+##	HTML PARSER V.2.3.1.464
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.455 (released 23.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.464 (released 27.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
@@ -168,10 +168,7 @@ if __name__ == "__main__":
 		else:
 			if '.' in command:
 				new_var = None
-				index = None
-				if '[' in command:
-					[command, index] = command.split('[')
-					index = index.split(']')[0]
+				indexVar = None
 
 				[var, methods_str] = command.split(".", maxsplit=1)
 
@@ -182,6 +179,9 @@ if __name__ == "__main__":
 						print(f"Incorrect name of var: {new_var}")
 						error = 1
 				var = var.replace(" ", "")
+				if '[' in var:
+					[var, indexVar] = var.split('[')
+					indexVar = indexVar.split(']')[0]
 				methods = methods_str.split(".")
 				if var in new_vars:
 					interVar = new_vars[var]
@@ -190,8 +190,26 @@ if __name__ == "__main__":
 				else:
 					print("Unknown variable: " + var)
 					error = 1
+
+				if indexVar:
+					if (str(type(interVar)) == "<class 'list'>"):
+						if len(interVar) > int(indexVar):
+							interVar = interVar[int(indexVar)]
+						else:
+							print("Index out of range: " + indexVar)
+							error = 1
+					else:
+						print("Index out of range: " + indexVar)
+						error = 1
+
 				if not error:
 					for method in methods:
+
+						index = None
+						if '[' in method:
+							[method, index] = method.split('[')
+							index = index.split(']')[0]
+
 						f = method.split("(")[0]
 						regex = re.compile(r'(?<=\().+(?=\))')
 						match = regex.search(method)
@@ -246,6 +264,17 @@ if __name__ == "__main__":
 									interVar = func(interVar)
 								else:
 									interVar = func(interVar, **kwargs)
+
+							if index:
+								if (str(type(interVar)) == "<class 'list'>"):
+									if len(interVar) > int(index):
+										interVar = interVar[int(index)]
+									else:
+										print("Index out of range: " + index)
+										error = 1
+								else:
+									print("Index out of range: " + index)
+									error = 1
 
 						else:
 							print("Unknown command: " + f)

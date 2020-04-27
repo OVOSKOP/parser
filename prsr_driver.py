@@ -318,6 +318,11 @@ class Node:
 		self.type = typeDOM.split(" ")[1].split(">")[0]
 
 	def getType(self):
+		""" - get type of document
+
+	OUTPUT:
+	str - type of document
+		"""
 		return self.type
 
 	def _addItem(self, level, content, tag = None, current_level = 0):
