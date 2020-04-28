@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.468
+##	HTML PARSER V.2.3.1.480
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 				if str(mod[item]).find('function') != -1 and item[0] != '_':
 					functions[module].update({item: mod[item]})
 
-	print("HTML Parser v.2.3.1.468 (released 27.04.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.480 (released 27.04.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
@@ -201,10 +201,9 @@ if __name__ == "__main__":
 					else:
 						print("Index out of range: " + indexVar)
 						error = 1
-
 				
-				for method in methods:
-					if not error:
+				if not error:	
+					for method in methods:
 						index = None
 						if '[' in method:
 							[method, index] = method.split('[')
@@ -272,9 +271,11 @@ if __name__ == "__main__":
 									else:
 										print("Index out of range: " + index)
 										error = 1
+										break
 								else:
 									print("Index out of range: " + index)
 									error = 1
+									break
 
 						else:
 							print("Unknown command: " + f)

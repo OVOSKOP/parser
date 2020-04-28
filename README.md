@@ -297,3 +297,55 @@ ________________________________________________________________________________
 	  Index out of range: 3
 
 ___________________________________________________________________________________________________________________
+
+При помощи этого парсера можно модифицировать HTML-документы. Возьмем для примера код из ПРИМЕРА 1.
+
+		html.html:
+		<!DOCTYPE html>
+		<html lang="ru">
+			<head>
+				<link rel="stylesheet" href="style.css">
+			</head>
+			<body>
+				<div id="qwe">
+					<a href="#" class="bad">Hello1</a>
+					<div id="ast">AST 
+					sCOOL</div>
+				</div>
+				<div class="i asd" id="i" ast="asd" req>Hello2</div>
+
+Далее наберем набор комманд:
+
+	>>> div = document.createElement(div)
+
+	>>> div.addAtribute(id=helloq, class=i)
+
+	>>> document.getElementById(qwe).before(div)
+
+Итак, мы создали элемент div, добавили ему атрибуты id и class, и добавили его перед элементом с id = qwe
+
+Теперь выведем весь HTML, и посмотрим, что получилось:
+
+	>>> document.text()
+
+Результат:
+
+	<!DOCTYPE html><html lang="ru">
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div id="helloq" class="i"></div> <!-- ДОБАВИЛИ -->
+		<div id="qwe"> <!-- ДОБАВИЛИ -->
+			<a href="#" class="bad">Hello1</a>
+			<div id="ast">AST sCOOL</div>
+		</div>
+		<div class="i asd" id="i" ast="asd" req="">Hello2</div>
+		<input>
+		<div class="i">Hello3</div>
+	</body>
+	</html>
+
+Как видите, наш div добавился перед элементом qwe.
+
+___________________________________________________________________________________________________________________

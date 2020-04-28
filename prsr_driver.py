@@ -439,5 +439,14 @@ class Node:
 	def warnings(self):
 		return self.warnings
 
+	def text(self):
+		text = ""
+		if self.getType():
+			text += "<!DOCTYPE " + self.getType() + ">"
+
+		documentElement = self.documentElement()
+		if documentElement:
+			return text + self.documentElement().outerHTML()
+		return None
 
 
