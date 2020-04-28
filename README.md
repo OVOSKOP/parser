@@ -186,6 +186,7 @@ ________________________________________________________________________________
 	>>> document.getElementById(qwe).getInfo()
 
 Вывод:
+
 	< div#qwe >
         parent: < body >
         content: <a href="#" class="bad">Hello1</a><div id="ast">AST sCOOL</div>
@@ -217,6 +218,7 @@ ________________________________________________________________________________
 	>>> item.getInfo()
 
 Вывод:
+
 	< div#qwe >
         parent: < body >
         content: <a href="#" class="bad">Hello1</a><div id="ast">AST sCOOL</div>
@@ -255,6 +257,7 @@ ________________________________________________________________________________
 	>>> document.getElementsByClassName(i)[1].getInfo()
 
 Вывод:
+
 	< div.i >
         parent: < body >
         content: Hello3
@@ -281,6 +284,7 @@ ________________________________________________________________________________
 	>>> item.getInfo()
 
 Вывод:
+
 	< div.i >
         parent: < body >
         content: Hello3
