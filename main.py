@@ -91,7 +91,11 @@
 ##			add count lines - 
 ##			add correct error parsing - 
 ##			add interactive var[..].method
+##			try errors
+##			method(method)
 ##
+##
+
 
 import sys
 import os.path
