@@ -49,12 +49,13 @@ class Text:
 
 # Tag
 class Tag:
-	def __init__(self, args, is_need_close_tag = True):
+	def __init__(self, args, line, is_need_close_tag = True):
 		global styles
 		self.content = []
 		self.parent = None
 		self.level = 0
 		self.levels = []
+		self.line = line
 		self.name = args[0][0]
 		self.atrs = {}
 		self.style = {}
@@ -303,6 +304,7 @@ class Node:
 		self.JS = []
 		self.CSS = []
 		self.level = -1
+		self.lines = 0
 		self.warnings = None
 		if content:
 			self.content.append(content)
@@ -448,5 +450,11 @@ class Node:
 		if documentElement:
 			return text + self.documentElement().outerHTML()
 		return None
+
+	def _setSize(self, lines):
+		self.lines = lines
+
+	def size(self):
+		return self.lines
 
 

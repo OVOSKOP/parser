@@ -339,7 +339,7 @@ ________________________________________________________________________________
 	</head>
 	<body>
 		<div id="helloq" class="i"></div> <!-- ДОБАВИЛИ -->
-		<div id="qwe"> <!-- ДОБАВИЛИ -->
+		<div id="qwe">
 			<a href="#" class="bad">Hello1</a>
 			<div id="ast">AST sCOOL</div>
 		</div>
