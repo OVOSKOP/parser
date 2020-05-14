@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.608 (Count Lines, Fixed bugs, Correct output of warnings)
+##	HTML PARSER V.2.3.1.610 (Count Lines, Fixed bugs, Correct output of warnings)
 ##	
 ##	DEVELOPER: OVOSKOP
 ##

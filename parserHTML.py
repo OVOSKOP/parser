@@ -6,7 +6,7 @@ encoding = [
 'windows-1251',
 ]
 
-def parserHTML(filename=None, characters=None):
+def parserHTML(filename):
 	if filename:
 		for enc in encoding:
 			try:
