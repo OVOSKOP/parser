@@ -1,4 +1,4 @@
-##	HTML PARSER V.2.3.1.610 (Count Lines, Fixed bugs, Correct output of warnings)
+##	HTML PARSER V.2.4.0.234 (Add parse URL, Fixed bugs)
 ##	
 ##	DEVELOPER: OVOSKOP
 ##
@@ -110,13 +110,20 @@ kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 KEYWORDS = ["document", "new", "quit", "help"]
 
 def getDocument():
-	filename = input("\nName of HTML file ('q' - exit): ")
+	filename = input("\nName of HTML file or URL ('q' - exit): ")
 
-	while not os.path.isfile(filename) and filename != 'q':
-		filename = input("\n\033[41m{}\033[40m\n".format("File '" + filename +"' is not exist.") + "\nPlease enter correct name of HTML file ('q' - exit): ")
-	
 	if filename == 'q':
 		sys.exit()
+
+	if not 'http' in filename:
+		while not os.path.isfile(filename) or not 'html' in filename.split('.') or len(filename.split('.')) < 2:
+			if filename == 'q':
+				sys.exit()
+			if not 'html' in filename.split('.') or len(filename.split('.')) < 2:
+				filename = input("\n\033[41m{}\033[40m\n".format("File '" + filename +"' is not HTML file.") + "\nPlease enter correct name of HTML file ('q' - exit): ")
+			else:
+				filename = input("\n\033[41m{}\033[40m\n".format("File '" + filename +"' is not exist.") + "\nPlease enter correct name of HTML file ('q' - exit): ")
+
 
 	document = parserHTML(filename) #парсируем файл
 
@@ -125,7 +132,7 @@ def getDocument():
 		print("\n\033[42m{}\033[40m\n".format("Parsed completed!"))
 		if len_err:
 			print("\033[30m\033[43m{}\033[37m\033[40m\n".format(
-				f"{len_err} warning in {','.join(' < ' + e + ' > on line ' + str(l) for (e, l) in err)}")
+				f"{len_err} warning{ 's' if len_err > 1 else '' } in {','.join(' < ' + e + ' > on line ' + str(l) for (e, l) in err)}")
 			)
 		return document
 	else:
@@ -147,7 +154,7 @@ def getAllFuncs():
 if __name__ == "__main__":
 	functions = getAllFuncs()
 
-	print("HTML Parser v.2.3.1.608 (released 13.05.2020). Created by OVOSKOP.")
+	print("HTML Parser v.2.3.1.610 (released 13.05.2020). Created by OVOSKOP.")
 	print('Type "help" for more information.')
 	
 	document = getDocument()
